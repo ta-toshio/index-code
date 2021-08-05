@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-class AppModel
+use Illuminate\Database\Eloquent\Model;
+
+class AppModel extends Model
 {
 
     protected static $unguarded = [
