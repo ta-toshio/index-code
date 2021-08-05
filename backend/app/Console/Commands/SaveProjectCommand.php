@@ -6,7 +6,7 @@ use App\Models\Project;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
-class SaveProject extends Command
+class SaveProjectCommand extends Command
 {
     /**
      * The name and signature of the console command.

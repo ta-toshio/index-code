@@ -7,7 +7,7 @@ use Illuminate\Console\Command;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
-class FileInspector extends Command
+class FileInspectorCommand extends Command
 {
     /**
      * The name and signature of the console command.

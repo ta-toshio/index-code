@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use ZipArchive;
 
-class ArchiveExtractor extends Command
+class ArchiveExtractorCommand extends Command
 {
     /**
      * The name and signature of the console command.
