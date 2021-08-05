@@ -26,9 +26,13 @@ class CreateAppTable extends Migration
             $table->id();
             $table->foreignId('project_id')->constrained()->onDelete('cascade');
             $table->string('name');
+            $table->string('file_path');
             $table->string('path');
             $table->string('extension')->default('');
             $table->text('description')->nullable();
+            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->boolean('is_dir')->default(false);
+            $table->unsignedSmallInteger('depth')->default(0);
             $table->timestamps();
         });
 
