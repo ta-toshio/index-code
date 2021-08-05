@@ -13,7 +13,7 @@ class SaveProjectCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'project:github';
+    protected $signature = 'index-code:save-project {repo}';
 
     /**
      * The console command description.
@@ -40,7 +40,12 @@ class SaveProjectCommand extends Command
     public function handle()
     {
         // 'https://github.com/EC-CUBE/ec-cube';
-        $url = 'https://api.github.com/repos/EC-CUBE/ec-cube';
+        // $url = 'https://api.github.com/repos/EC-CUBE/ec-cube';
+
+        $repo = $this->argument('repo');
+        $repo = trim($repo, '/');
+        $url = 'https://api.github.com/repos/'.$repo;
+
         $response = Http::get($url);
         $json = $response->json();
 
@@ -49,8 +54,8 @@ class SaveProjectCommand extends Command
             'url' => $json['html_url'],
         ];
 
-        $url = 'https://api.github.com/repos/EC-CUBE/ec-cube/commits?per_page=1';
-        $response = Http::get($url);
+        $commitUrl = $url.'/commits?per_page=1';
+        $response = Http::get($commitUrl);
         $json = $response->json();
 
         $data['version'] = $json[0]['sha'];
