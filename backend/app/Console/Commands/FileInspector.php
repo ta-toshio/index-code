@@ -40,17 +40,17 @@ class FileInspector extends Command
      */
     public function handle()
     {
-        $temp_dir = storage_path('app/temp');
+        $tempDir = storage_path('app/temp');
 
         // https://stackoverflow.com/questions/24783862/list-all-the-files-and-folders-in-a-directory-with-php-recursive-function/24784144
-//        $result = $this->dirtree($temp_dir);
+//        $result = $this->dirtree($tempDir);
 //        var_dump($result);
 
-//        $result = $this->getDirContents($temp_dir);
-//        var_dump($result);
-
-        $result = $this->getDireContents($temp_dir);
+        $result = $this->getDirContents($tempDir);
         var_dump($result);
+
+//        $result = $this->getDireContents($tempDir);
+//        var_dump($result);
 
         return 0;
     }
@@ -81,7 +81,7 @@ class FileInspector extends Command
         return array_merge($dirs, $files);
     }
 
-    private function getDirContents($dir, &$results = array())
+    private function getDirContents($dir, &$results = [])
     {
         $files = scandir($dir);
 

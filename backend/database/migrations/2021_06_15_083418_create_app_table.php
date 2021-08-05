@@ -18,7 +18,7 @@ class CreateAppTable extends Migration
             $table->string('name');
             $table->string('url');
             $table->string('version')->default('');
-            $table->text('description')->default('');
+            $table->text('description')->nullable();
             $table->timestamps();
         });
 
@@ -28,7 +28,7 @@ class CreateAppTable extends Migration
             $table->string('name');
             $table->string('path');
             $table->string('extension')->default('');
-            $table->text('description')->default('');
+            $table->text('description')->nullable();
             $table->timestamps();
         });
 
@@ -38,7 +38,7 @@ class CreateAppTable extends Migration
             $table->string('name');
             $table->string('path');
             $table->string('extension')->default('');
-            $table->text('description')->default('');
+            $table->text('description')->nullable();
             $table->boolean('existing')->default(true);
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->timestamps();
@@ -49,7 +49,7 @@ class CreateAppTable extends Migration
             $table->foreignId('klass_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('name'); // プロパティ名 or メソッド名
             $table->string('type'); // PROPERTY OR METHOD or FUNCTION
-            $table->text('description')->default('');
+            $table->text('description')->nullable();
             $table->timestamps();
         });
 
@@ -57,7 +57,7 @@ class CreateAppTable extends Migration
             $table->id();
             $table->foreignId('file_id')->constrained()->onDelete('cascade');
             $table->foreignId('klass_id')->nullable()->constrained()->onDelete('cascade');
-            $table->longText('body')->default('');
+            $table->longText('body')->nullable();
             $table->unsignedInteger('line')->default(0);
             $table->string('checksum')->default('');
             $table->timestamps();
@@ -69,8 +69,8 @@ class CreateAppTable extends Migration
             $table->foreignId('file_id')->constrained()->onDelete('cascade');
             $table->unsignedInteger('line')->default(0);
             $table->string('code')->default(''); // 該当行
-            $table->text('codes')->default(''); // 該当行の前後X行
-            $table->text('body')->default('');
+            $table->text('codes')->nullable(); // 該当行の前後X行
+            $table->text('body')->nullable();
             $table->string('version')->default('');
             $table->timestamps();
         });
@@ -88,8 +88,8 @@ class CreateAppTable extends Migration
             $table->foreignId('file_id')->nullable()->constrained();
             $table->unsignedInteger('start_line')->nullable();
             $table->unsignedInteger('end_line')->nullable();
-            $table->text('code')->default('');
-            $table->text('body')->default('');
+            $table->text('code')->nullable();
+            $table->text('body')->nullable();
             $table->unsignedSmallInteger('nest_level')->default(0);
             $table->unsignedSmallInteger('order')->default(0);
             $table->timestamps();
@@ -101,8 +101,8 @@ class CreateAppTable extends Migration
             $table->foreignId('code_id')->constrained()->onDelete('cascade');
             $table->unsignedInteger('start_line')->nullable();
             $table->unsignedInteger('end_line')->nullable();
-            $table->longText('code')->default('');
-            $table->text('note')->default('');
+            $table->longText('code')->nullable();
+            $table->text('note')->nullable();
             $table->timestamps();
         });
 
@@ -110,7 +110,7 @@ class CreateAppTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('title')->default('');
-            $table->longText('body')->default('');
+            $table->longText('body')->nullable();
             $table->timestamps();
         });
 
@@ -126,7 +126,7 @@ class CreateAppTable extends Migration
             $table->foreignId('table_id')->constrained()->onDelete('cascade');
             $table->string('name')->default('');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->text('note')->default('');
+            $table->text('note')->nullable();
             $table->timestamps();
         });
 
@@ -145,7 +145,7 @@ class CreateAppTable extends Migration
             $table->foreignId('field_id')->constrained()->onDelete('cascade');
             $table->string('name')->default('');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->text('note')->default('');
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }
@@ -157,7 +157,19 @@ class CreateAppTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('projects');
+        Schema::dropIfExists('field_details');
+        Schema::dropIfExists('fields');
+        Schema::dropIfExists('table_details');
+        Schema::dropIfExists('tables');
+        Schema::dropIfExists('notes');
+        Schema::dropIfExists('stocks');
+        Schema::dropIfExists('scrap_details');
+        Schema::dropIfExists('scraps');
+        Schema::dropIfExists('memos');
+        Schema::dropIfExists('codes');
+        Schema::dropIfExists('attributes');
+        Schema::dropIfExists('klasses');
         Schema::dropIfExists('files');
+        Schema::dropIfExists('projects');
     }
 }
