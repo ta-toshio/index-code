@@ -16,7 +16,7 @@ class CreateAppTable extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('url');
+            $table->string('url')->unique();
             $table->string('version')->default('');
             $table->text('description')->nullable();
             $table->timestamps();
