@@ -23,6 +23,39 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\File
+ *
+ * @property int $id
+ * @property int $project_id
+ * @property string $name
+ * @property string $path
+ * @property string $extension
+ * @property string|null $description
+ * @property int|null $parent_id
+ * @property int $is_dir
+ * @property int $depth
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|File newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|File newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|File query()
+ * @method static \Illuminate\Database\Eloquent\Builder|File whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|File whereDepth($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|File whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|File whereExtension($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|File whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|File whereIsDir($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|File whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|File whereParentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|File wherePath($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|File whereProjectId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|File whereUpdatedAt($value)
+ */
+	class File extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Project
  *
  * @property int $id
