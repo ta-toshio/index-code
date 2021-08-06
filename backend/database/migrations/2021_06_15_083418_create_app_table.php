@@ -28,6 +28,7 @@ class CreateAppTable extends Migration
             $table->string('name');
             $table->string('file_path');
             $table->string('path');
+            $table->longText('body')->nullable();
             $table->string('extension')->default('');
             $table->text('description')->nullable();
             $table->unsignedBigInteger('parent_id')->nullable();
@@ -57,6 +58,7 @@ class CreateAppTable extends Migration
             $table->timestamps();
         });
 
+        // bodyをfilesに持ったからこのテーブルいらないかも
         Schema::create('codes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('file_id')->constrained()->onDelete('cascade');
