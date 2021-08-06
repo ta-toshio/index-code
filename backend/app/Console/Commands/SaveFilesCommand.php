@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\File;
 use App\Models\Project;
+use App\Repositories\FileRepository;
 use App\Utils\FileArchiveExtractor;
 use App\Utils\FileInspector;
 use Illuminate\Console\Command;
@@ -27,12 +28,17 @@ class SaveFilesCommand extends Command
     /**
      * @var FileArchiveExtractor
      */
-    private $fileArchiveExtractor;
+    private FileArchiveExtractor $fileArchiveExtractor;
 
     /**
      * @var FileInspector
      */
-    private $fileInspector;
+    private FileInspector $fileInspector;
+
+    /**
+     * @var FileRepository
+     */
+    private FileRepository $fileRepository;
 
     /**
      * Create a new command instance.
@@ -41,7 +47,8 @@ class SaveFilesCommand extends Command
      */
     public function __construct(
         FileArchiveExtractor $fileArchiveExtractor,
-        FileInspector $fileInspector
+        FileInspector $fileInspector,
+        FileRepository $fileRepository
     )
     {
 
@@ -49,6 +56,7 @@ class SaveFilesCommand extends Command
 
         $this->fileInspector = $fileInspector;
         $this->fileArchiveExtractor = $fileArchiveExtractor;
+        $this->fileRepository = $fileRepository;
     }
 
     /**
@@ -78,48 +86,14 @@ class SaveFilesCommand extends Command
         $files = $this->fileInspector->getDirContents($archivedFilePath);
 
         $fileModelOfFiles = collect($files)
-            ->filter(fn(\SplFileInfo $file) => $file->isDir())
-            ->filter(fn(\SplFileInfo $file) => $file->getRealPath() !== $baseDir)
-            ->map(fn(\SplFileInfo $file) =>
-                File::updateOrCreate([
-                    'project_id' => $project->id,
-                    'file_path' => ltrim(str_replace($baseDir, '', $file->getRealPath()), DIRECTORY_SEPARATOR),
-                ], [
-                    'project_id' => $project->id,
-                    'name'=> $file->getFilename(),
-                    'file_path' => ltrim(str_replace($baseDir, '', $file->getRealPath()), DIRECTORY_SEPARATOR),
-                    'path' => ltrim(str_replace($baseDir, '', $file->getPath()), DIRECTORY_SEPARATOR),
-                    'is_dir' => true,
-                    'depth' => substr_count(str_replace($baseDir, '', $file->getPath()), DIRECTORY_SEPARATOR),
-                ])
-            );
+            ->filter(fn(\SplFileInfo $file) => $file->isDir() && $file->getRealPath() !== $baseDir)
+            ->map(fn(\SplFileInfo $file) => $this->fileRepository->updateOrCreate($file, $project->id, $baseDir));
 
         $fileModelOfFiles = collect($files)
             ->filter(fn(\SplFileInfo $file) => $file->isFile())
-            ->map(function (\SplFileInfo $file) use ($project, $baseDir) {
-                $path = ltrim(str_replace($baseDir, '', $file->getPath()), DIRECTORY_SEPARATOR);
-                $fileModel = File::query()
-                    ->where('project_id', $project->id)
-                    ->where('file_path', $path)
-                    ->first();
-
-                return File::updateOrCreate([
-                    'project_id' => $project->id,
-                    'file_path' => ltrim(str_replace($baseDir, '', $file->getRealPath()), DIRECTORY_SEPARATOR),
-                ], [
-                    'project_id' => $project->id,
-                    'name'=> $file->getFilename(),
-                    'file_path' => ltrim(str_replace($baseDir, '', $file->getRealPath()), DIRECTORY_SEPARATOR),
-                    'path' => $path,
-                    'extension' => $file->getExtension() ?? '',
-                    'parent_id' => $fileModel ? $fileModel->id : null,
-                    'is_dir' => false,
-                    'depth' => substr_count(str_replace($baseDir, '', $file->getPath()), DIRECTORY_SEPARATOR),
-                ]);
-            });
+            ->map(fn(\SplFileInfo $file) => $this->fileRepository->updateOrCreate($file, $project->id, $baseDir));
 
         $this->fileArchiveExtractor->deleteDir($archivedFilePath);
-
 
         return 0;
     }
