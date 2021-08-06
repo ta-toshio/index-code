@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use App\Domains\useCases\StoreFiles;
 use Illuminate\Console\Command;
 
-class SaveFilesCommand extends Command
+class StoreFilesCommand extends Command
 {
     /**
      * The name and signature of the console command.
