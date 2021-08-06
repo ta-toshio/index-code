@@ -2,17 +2,17 @@
 
 namespace App\Console\Commands;
 
-use App\Domains\useCases\StoreFiles;
+use App\Domains\useCases\StoreFile;
 use Illuminate\Console\Command;
 
-class StoreFilesCommand extends Command
+class StoreFileCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'index-code:save-files {repo}';
+    protected $signature = 'index-code:store-file {repo}';
 
     /**
      * The console command description.
@@ -22,20 +22,20 @@ class StoreFilesCommand extends Command
     protected $description = 'Command description';
 
     /**
-     * @var StoreFiles
+     * @var StoreFile
      */
-    private StoreFiles $storeFiles;
+    private StoreFile $storeFile;
 
     /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct(StoreFiles $storeFiles)
+    public function __construct(StoreFile $storeFile)
     {
         parent::__construct();
 
-        $this->storeFiles = $storeFiles;
+        $this->storeFile = $storeFile;
     }
 
     /**
@@ -47,7 +47,7 @@ class StoreFilesCommand extends Command
     {
         $repo = $this->argument('repo');
 
-        $this->storeFiles->handle($repo);
+        $this->storeFile->handle($repo);
 
         return 0;
     }

@@ -41,8 +41,6 @@ class CreateAppTable extends Migration
             $table->id();
             $table->foreignId('file_id')->constrained()->onDelete('cascade');
             $table->string('name');
-            $table->string('path');
-            $table->string('extension')->default('');
             $table->text('description')->nullable();
             $table->boolean('existing')->default(true);
             $table->unsignedBigInteger('parent_id')->nullable();
@@ -54,18 +52,8 @@ class CreateAppTable extends Migration
             $table->foreignId('klass_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('name'); // プロパティ名 or メソッド名
             $table->string('type'); // PROPERTY OR METHOD or FUNCTION
+            $table->unsignedInteger('start_line')->default(0);
             $table->text('description')->nullable();
-            $table->timestamps();
-        });
-
-        // bodyをfilesに持ったからこのテーブルいらないかも
-        Schema::create('codes', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('file_id')->constrained()->onDelete('cascade');
-            $table->foreignId('klass_id')->nullable()->constrained()->onDelete('cascade');
-            $table->longText('body')->nullable();
-            $table->unsignedInteger('line')->default(0);
-            $table->string('checksum')->default('');
             $table->timestamps();
         });
 
@@ -104,7 +92,7 @@ class CreateAppTable extends Migration
         Schema::create('stocks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('code_id')->constrained()->onDelete('cascade');
+            $table->foreignId('file_id')->constrained()->onDelete('cascade');
             $table->unsignedInteger('start_line')->nullable();
             $table->unsignedInteger('end_line')->nullable();
             $table->longText('code')->nullable();
@@ -172,7 +160,6 @@ class CreateAppTable extends Migration
         Schema::dropIfExists('scrap_details');
         Schema::dropIfExists('scraps');
         Schema::dropIfExists('memos');
-        Schema::dropIfExists('codes');
         Schema::dropIfExists('attributes');
         Schema::dropIfExists('klasses');
         Schema::dropIfExists('files');

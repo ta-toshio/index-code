@@ -6,14 +6,14 @@ use App\Models\Project;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
-class SaveProjectCommand extends Command
+class StoreProjectCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'index-code:save-project {repo}';
+    protected $signature = 'index-code:store-project {repo}';
 
     /**
      * The console command description.

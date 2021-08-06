@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * App\Models\File
@@ -35,6 +37,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static \Illuminate\Database\Eloquent\Builder|File whereProjectId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|File whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string|null $body
+ * @method static \Illuminate\Database\Eloquent\Builder|File whereBody($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Klass[] $klass
+ * @property-read int|null $klass_count
+ * @property-read \App\Models\Project $project
  */
 class File extends AppModel
 {
@@ -58,4 +65,15 @@ class File extends AppModel
         'editorconfig' => 0.5,
         'htaccess' => 0.5,
     ];
+
+    public function project(): BelongsTo
+    {
+        return $this->belongsTo(Project::class);
+    }
+
+    public function klass(): HasMany
+    {
+        return $this->hasMany(Klass::class);
+    }
+
 }

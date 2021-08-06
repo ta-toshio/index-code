@@ -7,7 +7,7 @@ use App\Models\File;
 class FileRepository
 {
 
-    public function updateOrCreate(\SplFileInfo $file, int $projectId, string $workingDir)
+    public function storeBySplFileInfo(\SplFileInfo $file, int $projectId, string $workingDir)
     {
         $path = ltrim(str_replace($workingDir, '', $file->getPath()), DIRECTORY_SEPARATOR);
         $filePath = ltrim(str_replace($workingDir, '', $file->getRealPath()), DIRECTORY_SEPARATOR);
@@ -35,4 +35,16 @@ class FileRepository
             'depth' => $depth,
         ]);
     }
+
+    public function chunkBy(int $count, \Closure $closure, array $conditions = [])
+    {
+        $query = File::query();
+
+        foreach ($conditions as $key => $value) {
+            $query->whereIn($key, $value);
+        }
+
+        $query->chunk($count, $closure);
+    }
+
 }

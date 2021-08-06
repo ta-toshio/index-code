@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * App\Models\Project
@@ -25,8 +26,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static \Illuminate\Database\Eloquent\Builder|Project whereUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Project whereVersion($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\File[] $files
+ * @property-read int|null $files_count
  */
 class Project extends AppModel
 {
     use HasFactory;
+
+    public function files(): HasMany
+    {
+        return $this->hasMany(File::class);
+    }
+
 }

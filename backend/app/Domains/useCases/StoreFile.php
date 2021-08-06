@@ -7,7 +7,7 @@ use App\Repositories\FileRepository;
 use App\Utils\FileArchiveExtractor;
 use App\Utils\FileInspector;
 
-class StoreFiles
+class StoreFile
 {
 
     /**
@@ -58,11 +58,11 @@ class StoreFiles
 
         $fileModelOfFiles = collect($files)
             ->filter(fn(\SplFileInfo $file) => $file->isDir() && $file->getRealPath() !== $baseDir)
-            ->map(fn(\SplFileInfo $file) => $this->fileRepository->updateOrCreate($file, $project->id, $baseDir));
+            ->map(fn(\SplFileInfo $file) => $this->fileRepository->storeBySplFileInfo($file, $project->id, $baseDir));
 
         $fileModelOfFiles = collect($files)
             ->filter(fn(\SplFileInfo $file) => $file->isFile())
-            ->map(fn(\SplFileInfo $file) => $this->fileRepository->updateOrCreate($file, $project->id, $baseDir));
+            ->map(fn(\SplFileInfo $file) => $this->fileRepository->storeBySplFileInfo($file, $project->id, $baseDir));
 
         $this->fileArchiveExtractor->deleteDir($archivedFilePath);
     }
