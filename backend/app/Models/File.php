@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Laravel\Scout\Searchable;
 
 /**
  * App\Models\File
@@ -46,6 +47,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class File extends AppModel
 {
     use HasFactory;
+    use Searchable;
 
     static array $allowedExtension = [
         'php' => 1.2,

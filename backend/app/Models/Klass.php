@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Laravel\Scout\Searchable;
 
 /**
  * App\Models\Klass
@@ -38,6 +39,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Klass extends AppModel
 {
     use HasFactory;
+    use Searchable;
 
     public function file(): BelongsTo
     {

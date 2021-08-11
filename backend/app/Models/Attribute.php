@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Laravel\Scout\Searchable;
 
 /**
  * App\Models\Attribute
@@ -33,12 +34,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Attribute extends AppModel
 {
 
+    use HasFactory;
+    use Searchable;
+
     const TYPE_METHOD = 'method';
     const TYPE_PROPERTY = 'method';
     const TYPE_TRAIT = 'trait';
     const TYPE_FUNCTION = 'function';
-
-    use HasFactory;
 
     public function klass(): BelongsTo
     {
