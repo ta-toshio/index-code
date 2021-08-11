@@ -10,10 +10,14 @@
     "require": {
         "php": "^8.0",
         "ext-zip": "*",
+        "babenkoivan/elastic-migrations": "^1.6",
+        "babenkoivan/elastic-scout-driver": "^1.5",
+        "babenkoivan/elastic-scout-driver-plus": "^2.4",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.40",
+        "laravel/scout": "^9.2",
         "laravel/tinker": "^2.5",
         "nikic/php-parser": "^4.12"
     },
