@@ -41,6 +41,7 @@ class CreateAppTable extends Migration
             $table->id();
             $table->foreignId('file_id')->constrained()->onDelete('cascade');
             $table->string('name');
+            $table->string('namespace')->default('');
             $table->text('description')->nullable();
             $table->boolean('existing')->default(true);
             $table->unsignedBigInteger('parent_id')->nullable();
@@ -49,6 +50,7 @@ class CreateAppTable extends Migration
 
         Schema::create('attributes', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('file_id')->constrained()->onDelete('cascade');
             $table->foreignId('klass_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('name'); // プロパティ名 or メソッド名
             $table->string('type'); // PROPERTY OR METHOD or FUNCTION
