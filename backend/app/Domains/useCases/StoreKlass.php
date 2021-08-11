@@ -86,10 +86,10 @@ class StoreKlass
 
                 switch (get_class($node)) {
                     case Node\Stmt\ClassMethod::class:
-                        $this->storeMethod($klass->id, $node);
+                        $this->storeMethod($file->id, $klass->id, $node);
                         break;
                     case Node\Stmt\Property::class:
-                        $this->storeProperty($klass->id, $node);
+                        $this->storeProperty($file->id, $klass->id, $node);
                         if (count($node->props) > 1) {
                             var_dump('-----------unexpected props count');
                             var_dump($node);
@@ -112,17 +112,17 @@ class StoreKlass
         return implode('\\', $namespace->name->parts);
     }
 
-    private function storeMethod(int $klassId, $node): Attribute
+    private function storeMethod(int $fileId, int|null $klassId, $node): Attribute
     {
         $name = $node->name->name;
         $data = [
             'type' => Attribute::TYPE_METHOD,
             'start_line' => $node->name->getStartLine(),
         ];
-        return $this->attributeRepository->updateOrCreate($klassId, $name, $data);
+        return $this->attributeRepository->updateOrCreate($fileId, $klassId, $name, $data);
     }
 
-    private function storeProperty(int $klassId, $node): Attribute
+    private function storeProperty(int $fileId, int|null $klassId, $node): Attribute
     {
         $property = $node->props[0];
         $name = $property->name->name;
@@ -130,6 +130,6 @@ class StoreKlass
             'type' => Attribute::TYPE_PROPERTY,
             'start_line' => $property->name->getStartLine(),
         ];
-        return $this->attributeRepository->updateOrCreate($klassId, $name, $data);
+        return $this->attributeRepository->updateOrCreate($fileId, $klassId, $name, $data);
     }
 }
