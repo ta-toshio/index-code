@@ -38,7 +38,7 @@ final class CreateKlassesIndex implements MigrationInterface
                 ]
             );
             $mapping->text('description');
-            $mapping->boolean('existing');
+            $mapping->short('existing');
             $mapping->integer('parent_id');
             $mapping->date('created_at');
             $mapping->date('updated_at');

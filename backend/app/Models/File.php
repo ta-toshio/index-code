@@ -78,4 +78,9 @@ class File extends AppModel
         return $this->hasMany(Klass::class);
     }
 
+    public function searchableAs()
+    {
+        return 'files';
+    }
+
 }

@@ -52,7 +52,7 @@ final class CreateFilesIndex implements MigrationInterface
             $mapping->keyword('extension');
             $mapping->text('description');
             $mapping->integer('parent_id');
-            $mapping->boolean('is_dir');
+            $mapping->short('is_dir');
             $mapping->short('depth');
             $mapping->date('created_at');
             $mapping->date('updated_at');
