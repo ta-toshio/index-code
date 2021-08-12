@@ -1,0 +1,52 @@
+<?php
+declare(strict_types=1);
+
+use ElasticAdapter\Indices\Mapping;
+use ElasticAdapter\Indices\Settings;
+use ElasticMigrations\Facades\Index;
+use ElasticMigrations\MigrationInterface;
+
+final class CreateFieldsIndex implements MigrationInterface
+{
+    /**
+     * Run the migration.
+     */
+    public function up(): void
+    {
+        Index::create('fields', function (Mapping $mapping, Settings $settings) {
+            $mapping->integer('table_id');
+            $mapping->text('table_name',
+                [
+                    'fields' => [
+                        'keyword' => [
+                            'type' => 'keyword',
+                            'ignore_above' => 256,
+                        ]
+                    ]
+                ]
+            );
+            $mapping->text('field_name',
+                [
+                    'fields' => [
+                        'keyword' => [
+                            'type' => 'keyword',
+                            'ignore_above' => 256,
+                        ]
+                    ]
+                ]
+            );
+            $mapping->keyword('field_type');
+            $mapping->text('field_param');
+            $mapping->date('created_at');
+            $mapping->date('updated_at');
+        });
+    }
+
+    /**
+     * Reverse the migration.
+     */
+    public function down(): void
+    {
+        Index::dropIfExists('fields');
+    }
+}
