@@ -107,3 +107,23 @@ services:
     tty: true
     environment:
       - DJANGO_SETTINGS_MODULE=config.local_settings
+
+  client:
+    build:
+      context: .
+      dockerfile: ./infra/docker/nextjs/Dockerfile.dev
+      args:
+        NODE_ENV: development
+    ports:
+      - 8125:8125
+    volumes:
+      - type: bind
+        source: ./frontend
+        target: /work/frontend
+    environment:
+      - NODE_ENV=development
+      - APP_HOST=index-code.me
+    depends_on:
+      - web
+      - app
+    tty: true
