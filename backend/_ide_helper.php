@@ -15528,6 +15528,17 @@
      
 }
 
+    namespace Nuwave\Lighthouse { 
+            /**
+     * The main entrypoint to start and end GraphQL execution.
+     *
+     */ 
+        class GraphQL {
+         
+    }
+     
+}
+
     namespace Illuminate\Http { 
             /**
      * 
@@ -18841,6 +18852,7 @@ namespace  {
             class Validator extends \Illuminate\Support\Facades\Validator {}
             class View extends \Illuminate\Support\Facades\View {}
             class Flare extends \Facade\Ignition\Facades\Flare {}
+            class graphql extends \Nuwave\Lighthouse\GraphQL {}
      
 }
 
