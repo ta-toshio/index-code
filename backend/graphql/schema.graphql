@@ -1,0 +1,5 @@
+#import ./scalar.graphql
+#import ./type.graphql
+#import ./inputType.graphql
+#import ./query.graphql
+#import ./mutation.graphql
