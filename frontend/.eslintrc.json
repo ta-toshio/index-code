@@ -1,9 +1,13 @@
 {
+  "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint"],
   "extends": [
-    "next/core-web-vitals",
-    "plugin:@typescript-eslint/recommended",
-    "prettier"
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended"
+    // Uncomment the following lines to enable eslint-config-prettier
+    // Is not enabled right now to avoid issues with the Next.js repo
+    // "prettier",
   ],
   "env": {
     "es6": true,
@@ -11,12 +15,17 @@
     "jest": true,
     "node": true
   },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
   "rules": {
     "react/react-in-jsx-scope": 0,
     "react/display-name": 0,
     "react/prop-types": 0,
     "@typescript-eslint/ban-ts-comment": 0,
-    "@typescript-eslint/explicit-module-boundary-types": 0,
+    "@typescript-eslint/ban-types": 0,
     "@typescript-eslint/explicit-function-return-type": 0,
     "@typescript-eslint/explicit-member-accessibility": 0,
     "@typescript-eslint/indent": 0,
@@ -34,14 +43,6 @@
       2,
       {
         "allow": ["warn", "error"]
-      }
-    ],
-    "import/order": [
-      "error",
-      {
-        "alphabetize": {
-          "order": "asc"
-        }
       }
     ]
   }
