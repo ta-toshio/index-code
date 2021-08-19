@@ -1,0 +1,9 @@
+
+type SearchText {
+    id: ID!
+    index_name: String!
+    text: String!
+    highlight: String!
+    score: Float!
+}
+

@@ -2,6 +2,8 @@
 type Query {
     users: [User!]! @paginate(defaultCount: 10)
     user(id: ID @eq): User @find
+
+    searchText(search: String!): [SearchText!]!
 }
 
 extend type Query @guard {
