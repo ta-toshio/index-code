@@ -30,6 +30,8 @@ use Laravel\Scout\Searchable;
  * @method static \Illuminate\Database\Eloquent\Builder|Attribute whereUpdatedAt($value)
  * @mixin \Eloquent
  * @property-read \App\Models\Klass|null $klass
+ * @property int $file_id
+ * @method static \Illuminate\Database\Eloquent\Builder|Attribute whereFileId($value)
  */
 class Attribute extends AppModel
 {
@@ -45,6 +47,14 @@ class Attribute extends AppModel
     public function klass(): BelongsTo
     {
         return $this->belongsTo(Klass::class);
+    }
+
+    public function toSearchableArray(): array
+    {
+        return array_merge(
+            $this->toArray(),
+            ['search' => $this->name]
+        );
     }
 
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use ElasticScoutDriverPlus\QueryDsl;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -40,6 +41,7 @@ class Klass extends AppModel
 {
     use HasFactory;
     use Searchable;
+    use QueryDsl;
 
     public function file(): BelongsTo
     {
@@ -49,6 +51,19 @@ class Klass extends AppModel
     public function attribute(): HasMany
     {
         return $this->hasMany(Attribute::class);
+    }
+
+    public function toSearchableArray(): array
+    {
+        $search = $this->name;
+        if ($this->namespace) {
+            $search = rtrim($this->namespace, '\\') . '\\' . $this->name;
+        }
+
+        return array_merge(
+            $this->toArray(),
+            ['search' => $search]
+        );
     }
 
 }

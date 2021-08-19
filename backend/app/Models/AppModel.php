@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Model;
 class AppModel extends Model
 {
 
+    use Scope;
+
     protected static $unguarded = [
         'id',
         'created_at',

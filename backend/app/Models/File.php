@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use ElasticScoutDriverPlus\QueryDsl;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -48,6 +50,7 @@ class File extends AppModel
 {
     use HasFactory;
     use Searchable;
+    use QueryDsl;
 
     static array $allowedExtension = [
         'php' => 1.2,
@@ -81,6 +84,33 @@ class File extends AppModel
     public function searchableAs()
     {
         return 'files';
+    }
+
+    public function toSearchableArray(): array
+    {
+        $search = $this->name;
+        if ($this->is_dir) {
+            $search = $this->file_path;
+        } else if ($this->file_path) {
+            $search = rtrim($this->file_path, '/') . '/' . $this->name;
+        }
+
+        return array_merge(
+            $this->toArray(),
+            ['search' => $search]
+        );
+    }
+
+    /**
+     * @param  Builder  $query
+     * @param  array  $args
+     * @return Builder
+     */
+    public function scopeDepthSort(Builder $query, array $args)
+    {
+        return $query
+            ->orderBy('depth', 'ASC')
+            ->orderBy('name', 'ASC');
     }
 
 }
