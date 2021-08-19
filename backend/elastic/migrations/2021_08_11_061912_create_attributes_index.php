@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use App\Utils\ElasticMigrationHelper;
 use ElasticAdapter\Indices\Mapping;
 use ElasticAdapter\Indices\Settings;
 use ElasticMigrations\Facades\Index;
@@ -8,12 +9,20 @@ use ElasticMigrations\MigrationInterface;
 
 final class CreateAttributesIndex implements MigrationInterface
 {
+    use ElasticMigrationHelper;
+
     /**
      * Run the migration.
      */
     public function up(): void
     {
         Index::create('attributes', function (Mapping $mapping, Settings $settings) {
+
+            $this->applyNounNgram($settings);
+
+            $mapping->text('search', [
+                'analyzer' => 'standard_ngram'
+            ]);
             $mapping->integer('file_id');
             $mapping->integer('klass_id');
             $mapping->text('name',
