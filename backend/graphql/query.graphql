@@ -5,12 +5,14 @@ type Query {
 
     searchText(search: String!): [SearchText!]!
 
-    getAllFilePath(projectId: Int!): [FilePath!]!
+    getAllFilePath(project_id: Int! @eq): [FilePath!]!
         @paginate(
             defaultCount: 5000
             model: "\\App\\Models\\File"
             scopes: ["depthSort"]
         )
+
+    getFileByFilePath(project_id: Int! @eq file_path: String! @eq): File! @first
 }
 
 extend type Query @guard {
