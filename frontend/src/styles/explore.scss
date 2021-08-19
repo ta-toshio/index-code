@@ -1,0 +1,9 @@
+.explore {
+    min-width: 967px;
+
+    &__sidebar {
+        width: 250px;
+        overflow: scroll;
+        max-height: 100vh;
+    }
+}
