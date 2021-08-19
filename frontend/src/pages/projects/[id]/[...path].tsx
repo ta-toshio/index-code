@@ -18,7 +18,6 @@ const File: NextPage = () => {
 
   const { tree } = useFilePath({ projectId: router.query.id })
   const { file } = useCodeByFilePath({ projectId: router.query.id, filePath })
-  console.log(file)
 
   return (
     <Layout>

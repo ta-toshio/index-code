@@ -7,9 +7,7 @@ import Link from 'next/link'
 const Top: React.FC = () => {
   const { searchText, called, loading, data, setSearchTextDebounce } =
     useSearchText()
-  console.log('called', called)
-  console.log('loading', loading)
-  console.log('data', data)
+
   return (
     <Layout title="Home | Next.js + TypeScript Example">
       <section className="hero is-info">
