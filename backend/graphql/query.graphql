@@ -4,6 +4,13 @@ type Query {
     user(id: ID @eq): User @find
 
     searchText(search: String!): [SearchText!]!
+
+    getAllFilePath(projectId: Int!): [FilePath!]!
+        @paginate(
+            defaultCount: 5000
+            model: "\\App\\Models\\File"
+            scopes: ["depthSort"]
+        )
 }
 
 extend type Query @guard {
