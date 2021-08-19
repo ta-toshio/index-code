@@ -1,131 +1,78 @@
+import React from 'react'
 import Layout from '../../components/Layout'
+import useSearchText from '../search/useSearchText'
+import { CircleLoadingIcon } from '../../components/icon/SvgIcon'
+import Link from 'next/link'
 
-const Top = () => (
-  <Layout title="Home | Next.js + TypeScript Example">
-    <section className="hero is-white is-fullheight">
-      <div className="hero-body">
-        <div className="container">
-          <div className="columns  is-vcentered reverse-columns">
-            <div
-              className="column
-          is-10-mobile is-offset-1-mobile
-          is-10-tablet is-offset-1-tablet
-          is-5-desktop is-offset-1-desktop
-          is-5-widescreen is-offset-1-widescreen
-          is-5-fullhd is-offset-1-fullhd"
-              data-aos="fade-down"
-            >
-              <h1 className="title titled is-1 mb-6">
-                absurd illustrations that make sense
-              </h1>
-              <h2 className=" subtitled subtitle has-text-grey is-4 has-text-weight-normal is-family-sans-serif">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                Laborum cupiditate dolorum vitae dolores nesciunt totam magni
-                quas.
-              </h2>
-              <div className="buttons">
-                <button className="button is-black">Download</button>
-                <button className="button">Subscribe</button>
+const Top: React.FC = () => {
+  const { searchText, called, loading, data, setSearchTextDebounce } =
+    useSearchText()
+  console.log('called', called)
+  console.log('loading', loading)
+  console.log('data', data)
+  return (
+    <Layout title="Home | Next.js + TypeScript Example">
+      <section className="hero is-info">
+        <div className="hero-body">
+          <div className="container">
+            <div className="card">
+              <div className="card-content">
+                <div className="content">
+                  <div className="control has-icons-left has-icons-right search-field">
+                    <input
+                      className="input is-large"
+                      type="text"
+                      placeholder=""
+                      onChange={(e) => setSearchTextDebounce(e.target.value)}
+                    />
+                    <span className="icon is-medium is-left">
+                      <i className="fa fa-search" />
+                    </span>
+                    <span className="icon is-medium is-right">
+                      <i className="delete is-medium clear-search" />
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
-            <div
-              data-aos="fade-right"
-              className="column
-          is-10-mobile is-offset-1-mobile
-          is-10-tablet is-offset-1-tablet
-          is-4-desktop is-offset-1-desktop
-          is-4-widescreen is-offset-1-widescreen
-          is-4-fullhd is-offset-1-fullhd"
-            >
-              <figure className="image is-square">
-                <img src="../images/undraw_Camera_re_cnp4.svg" />
-              </figure>
-            </div>
           </div>
         </div>
-      </div>
-    </section>
-
-    <section className="hero is-white is-fullheight">
-      <div className="hero-body">
-        <div className="container">
-          <div className="columns  is-vcentered">
-            <div
-              data-aos="fade-left"
-              className="column
-          is-10-mobile is-offset-1-mobile
-          is-10-tablet is-offset-1-tablet
-          is-4-desktop is-offset-1-desktop
-          is-4-widescreen is-offset-1-widescreen
-          is-4-fullhd is-offset-1-fullhd"
-            >
-              <figure className="image is-square">
-                <img src="../images/undraw_Camera_re_cnp4.svg" />
-              </figure>
-            </div>
-            <div
-              data-aos="fade-down"
-              className="column
-          is-10-mobile is-offset-1-mobile
-          is-10-tablet is-offset-1-tablet
-          is-5-desktop is-offset-1-desktop
-          is-5-widescreen is-offset-1-widescreen
-          is-5-fullhd is-offset-1-fullhd"
-            >
-              <h1 className="titled title is-1 mb-6">
-                absurd illustrations that make sense
-              </h1>
-              <h2 className="subtitled subtitle">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                Laborum cupiditate dolorum vitae dolores nesciunt totam magni
-                quas.
-              </h2>
-            </div>
+      </section>
+      <section className="content-center">
+        <div className="column is-9">
+          <div className="content is-medium pt-3">
+            <h3 className="title is-3">Results</h3>
+            {called && loading && <CircleLoadingIcon />}
+            {searchText &&
+              data &&
+              data.searchText &&
+              data.searchText.map((searchTextData) => (
+                <div
+                  className="box"
+                  key={`search-text-data-${searchTextData.index_name}-${searchTextData.id}`}
+                >
+                  <Link href={`/projects/1/${searchTextData.id}/a/b.php`}>
+                    <a>
+                      <span className="title is-3">
+                        {searchTextData.index_name}
+                      </span>
+                      <pre>
+                        <code
+                          className="language-javascript"
+                          dangerouslySetInnerHTML={{
+                            __html: searchTextData.highlight,
+                          }}
+                        />
+                      </pre>
+                    </a>
+                  </Link>
+                </div>
+              ))}
           </div>
         </div>
-      </div>
-    </section>
-
-    <section className="hero is-white is-fullheight">
-      <div className="hero-body">
-        <div className="container">
-          <div className="columns  is-vcentered reverse-columns">
-            <div
-              data-aos="fade-right"
-              className="column
-          is-10-mobile is-offset-1-mobile
-          is-10-tablet is-offset-1-tablet
-          is-5-desktop is-offset-1-desktop
-          is-5-widescreen is-offset-1-widescreen
-          is-5-fullhd is-offset-1-fullhd"
-            >
-              <h1 className="title titled is-1 mb-6">
-                absurd illustrations that make sense
-              </h1>
-              <h2 className="subtitle subtitled">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                Laborum cupiditate dolorum vitae dolores nesciunt totam magni
-                quas.
-              </h2>
-            </div>
-            <div
-              className="column
-          is-10-mobile is-offset-1-mobile
-          is-10-tablet is-offset-1-tablet
-          is-4-desktop is-offset-1-desktop
-          is-4-widescreen is-offset-1-widescreen
-          is-4-fullhd is-offset-1-fullhd"
-              data-aos="fade-up"
-            >
-              <figure className="image is-square">
-                <img src="../images/undraw_Camera_re_cnp4.svg" />
-              </figure>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </Layout>
-)
+      </section>
+    </Layout>
+  )
+}
 
 export default Top
