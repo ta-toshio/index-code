@@ -56,11 +56,16 @@ class StoreFile
 
         $files = $this->fileInspector->getDirContents($archivedFilePath);
 
-        $fileModelOfFiles = collect($files)
+        collect($files)
             ->filter(fn(\SplFileInfo $file) => $file->isDir() && $file->getRealPath() !== $baseDir)
             ->map(fn(\SplFileInfo $file) => $this->fileRepository->storeBySplFileInfo($file, $project->id, $baseDir));
 
-        $fileModelOfFiles = collect($files)
+        // 保存順の関係で親ノードより先に保存されてしまったノードに、再度なめることによってparent_idを保存させるための2度目の保存
+        collect($files)
+            ->filter(fn(\SplFileInfo $file) => $file->isDir() && $file->getRealPath() !== $baseDir)
+            ->map(fn(\SplFileInfo $file) => $this->fileRepository->storeBySplFileInfo($file, $project->id, $baseDir));
+
+        collect($files)
             ->filter(fn(\SplFileInfo $file) => $file->isFile())
             ->map(fn(\SplFileInfo $file) => $this->fileRepository->storeBySplFileInfo($file, $project->id, $baseDir));
 
