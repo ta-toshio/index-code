@@ -1,0 +1,218 @@
+.explore-content {
+    flex: 1 1 auto;
+
+    display: flex;
+    min-height: 0;
+
+    position: relative; // for sidebar toggle
+
+    &__sidebar {
+        background: var(--color-bg-2);
+
+        &-toggle {
+            background: var(--color-bg-2);
+            color: var(--link-color);
+
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1; // overlay the content when sidebar is closed
+        }
+
+        &-resizable {
+            max-width: 60%;
+            min-width: 8rem;
+            &--open .tree {
+                width: 16rem;
+            }
+        }
+    }
+
+    &__content {
+        isolation: isolate;
+        flex: 1 1 auto;
+
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        min-width: 0;
+
+        background-color: var(--body-bg);
+
+        // Add border to repo revision container content
+        // but enable variable margin-bottom (by setting it on child div)
+        // without having to repeat border styles.
+        > div:first-of-type {
+            border: 1px solid var(--border-color);
+            border-top-left-radius: 0.1875rem;
+            border-top-right-radius: 0.1875rem;
+            border-bottom: none;
+        }
+    }
+
+    &__breadcrumb-icon {
+        margin-left: 0.125rem;
+        margin-right: -0.25rem;
+    }
+
+    &__divider {
+        margin-left: 0.375rem;
+        margin-right: 0.375rem;
+    }
+}
+
+
+.blob-page {
+    display: flex;
+    flex-direction: column;
+
+    &__placeholder {
+        background-color: var(--code-bg);
+        flex: 1 1 50%;
+    }
+
+    &__blob {
+        flex: 1;
+        position: relative;
+    }
+
+    &__aborted-alert {
+        margin-bottom: 0;
+        border: none;
+    }
+}
+
+
+.blob {
+    position: relative;
+    overflow: auto;
+    padding-top: 0.5rem;
+    tab-size: 4;
+    display: flex;
+    background-color: var(--code-bg);
+
+    &__code {
+        flex: 1;
+
+        table {
+            border-collapse: collapse;
+
+            .theme-redesign & {
+                // Give room to view the last few lines of code
+                // without the floating status bar getting in the way.
+                &::after {
+                    content: '';
+                    display: inline-block;
+                    padding-bottom: calc(var(--blob-status-bar-height) + var(--blob-status-bar-vertical-gap) + 0.5rem);
+                    // Extra 0.5rem padding on top of the minimum required to expose code;
+                }
+            }
+        }
+
+        td.line {
+            &::before {
+                // draw line number with css so it cannot be copied to clipboard
+                content: attr(data-line);
+            }
+
+            text-align: right;
+            padding-left: 0.5rem;
+            min-width: 2rem;
+            user-select: none;
+            vertical-align: top;
+            color: var(--line-number-color);
+        }
+
+        tr {
+            transition: background 200ms ease-out;
+            &.selected {
+                background: var(--code-selection-bg);
+            }
+        }
+
+        td.line,
+        td.code {
+            padding: 0;
+        }
+
+        td.code {
+            width: 100%;
+            padding-left: 1rem;
+            white-space: pre;
+
+            div {
+                display: inline-block;
+            }
+
+            .line-decoration-attachment-portal {
+                span::before {
+                    content: attr(data-contents);
+                }
+            }
+        }
+
+        &--wrapped {
+            td.code {
+                white-space: pre-wrap;
+            }
+        }
+    }
+}
+
+// Styles for floating + scrollable status bar
+.blob-status-bar {
+    // Add this class to the parent container of <Blob> and <StatusBar>.
+    // Why not add this to <Blob>? Absolutely-positioned elements
+    // in a scrolling overflow container move with the content on scroll.
+    // See: https://www.bennadel.com/blog/3409-using-position-absolute-inside-a-scrolling-overflow-container.htm
+    // Unfortunately, <StatusBar> can overlap with <Blob>'s scrollbar, so calculate <StatusBar>'s
+    // `right` and `maxWidth` at runtime.
+    &__container {
+        position: relative;
+
+        --blob-status-bar-height: 2rem;
+        // Used to calculate status bar `bottom` along with scrollbar width.
+        --blob-status-bar-vertical-gap: 1rem;
+        // Used to calculate status bar `right` along with scrollbar width.
+        --blob-status-bar-horizontal-gap: 0.5rem;
+    }
+
+    // Add this class to <StatusBar>
+    &__body {
+        // Make the status bar "float" slightly above the bottom of the code view.
+        position: absolute;
+        bottom: var(--blob-status-bar-vertical-gap);
+
+        // Override default bootstrap `.w-100`, ensure that the status bar "sticks" to the right side.
+        width: auto !important;
+        // Default `right`, should be added with scrollbar width at runtime.
+        right: var(--blob-status-bar-horizontal-gap);
+        // `maxWidth` will also be subtracted by scrollbar width at runtime
+        max-width: calc(100% - (2 * var(--blob-status-bar-horizontal-gap)));
+
+        // Misc. style
+        height: var(--blob-status-bar-height);
+        border-radius: var(--border-radius);
+        border: 1px solid var(--border-color);
+        background-color: var(--body-bg);
+        color: var(--body-color);
+    }
+}
+
+.blob__code {
+    -moz-box-flex: 1;
+    flex: 1 1;
+}
+
+code {
+    background-color: whitesmoke;
+    color: #da1039;
+    font-size: 0.875em;
+    font-weight: normal;
+    padding: 0.25em 0.5em 0.25em;
+}
+code, pre {
+    -moz-osx-font-smoothing: auto;
+    -webkit-font-smoothing: auto;
+    font-family: monospace;
+}
