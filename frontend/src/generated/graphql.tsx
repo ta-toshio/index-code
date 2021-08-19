@@ -132,6 +132,7 @@ export type Query = {
   __typename?: 'Query';
   user?: Maybe<User>;
   searchText: Array<SearchText>;
+  getFileByFilePath: File;
   me?: Maybe<User>;
   users?: Maybe<UserPaginator>;
   getAllFilePath?: Maybe<FilePathPaginator>;
@@ -148,6 +149,12 @@ export type QuerySearchTextArgs = {
 };
 
 
+export type QueryGetFileByFilePathArgs = {
+  project_id: Scalars['Int'];
+  file_path: Scalars['String'];
+};
+
+
 export type QueryUsersArgs = {
   first?: Maybe<Scalars['Int']>;
   page?: Maybe<Scalars['Int']>;
@@ -155,7 +162,7 @@ export type QueryUsersArgs = {
 
 
 export type QueryGetAllFilePathArgs = {
-  projectId: Scalars['Int'];
+  project_id: Scalars['Int'];
   first?: Maybe<Scalars['Int']>;
   page?: Maybe<Scalars['Int']>;
 };
@@ -226,6 +233,11 @@ export type PaginatorInfoFragmentFragment = (
   & Pick<PaginatorInfo, 'count' | 'currentPage' | 'firstItem' | 'hasMorePages' | 'lastItem' | 'lastPage' | 'perPage' | 'total'>
 );
 
+export type FileFragmentFragment = (
+  { __typename?: 'File' }
+  & Pick<File, 'id' | 'project_id' | 'name' | 'file_path' | 'path' | 'body' | 'extension' | 'description' | 'parent_id' | 'is_dir' | 'depth' | 'created_at' | 'updated_at'>
+);
+
 export type GetAllFilePathQueryVariables = Exact<{
   page: Scalars['Int'];
   projectId: Scalars['Int'];
@@ -244,6 +256,20 @@ export type GetAllFilePathQuery = (
       & PaginatorInfoFragmentFragment
     ) }
   )> }
+);
+
+export type GetFileByFilePathQueryVariables = Exact<{
+  projectId: Scalars['Int'];
+  filePath: Scalars['String'];
+}>;
+
+
+export type GetFileByFilePathQuery = (
+  { __typename?: 'Query' }
+  & { getFileByFilePath: (
+    { __typename?: 'File' }
+    & FileFragmentFragment
+  ) }
 );
 
 export type SearchTextQueryVariables = Exact<{
@@ -332,6 +358,23 @@ export const PaginatorInfoFragmentFragmentDoc = gql`
   total
 }
     `;
+export const FileFragmentFragmentDoc = gql`
+    fragment fileFragment on File {
+  id
+  project_id
+  name
+  file_path
+  path
+  body
+  extension
+  description
+  parent_id
+  is_dir
+  depth
+  created_at
+  updated_at
+}
+    `;
 export const UserFragmentFragmentDoc = gql`
     fragment userFragment on User {
   id
@@ -344,7 +387,7 @@ export const UserFragmentFragmentDoc = gql`
     `;
 export const GetAllFilePathDocument = gql`
     query GetAllFilePath($page: Int!, $projectId: Int!) {
-  getAllFilePath(page: $page, projectId: $projectId) {
+  getAllFilePath(page: $page, project_id: $projectId) {
     data {
       id
       project_id
@@ -391,6 +434,42 @@ export function useGetAllFilePathLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type GetAllFilePathQueryHookResult = ReturnType<typeof useGetAllFilePathQuery>;
 export type GetAllFilePathLazyQueryHookResult = ReturnType<typeof useGetAllFilePathLazyQuery>;
 export type GetAllFilePathQueryResult = Apollo.QueryResult<GetAllFilePathQuery, GetAllFilePathQueryVariables>;
+export const GetFileByFilePathDocument = gql`
+    query GetFileByFilePath($projectId: Int!, $filePath: String!) {
+  getFileByFilePath(project_id: $projectId, file_path: $filePath) {
+    ...fileFragment
+  }
+}
+    ${FileFragmentFragmentDoc}`;
+
+/**
+ * __useGetFileByFilePathQuery__
+ *
+ * To run a query within a React component, call `useGetFileByFilePathQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFileByFilePathQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFileByFilePathQuery({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *      filePath: // value for 'filePath'
+ *   },
+ * });
+ */
+export function useGetFileByFilePathQuery(baseOptions: Apollo.QueryHookOptions<GetFileByFilePathQuery, GetFileByFilePathQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetFileByFilePathQuery, GetFileByFilePathQueryVariables>(GetFileByFilePathDocument, options);
+      }
+export function useGetFileByFilePathLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetFileByFilePathQuery, GetFileByFilePathQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetFileByFilePathQuery, GetFileByFilePathQueryVariables>(GetFileByFilePathDocument, options);
+        }
+export type GetFileByFilePathQueryHookResult = ReturnType<typeof useGetFileByFilePathQuery>;
+export type GetFileByFilePathLazyQueryHookResult = ReturnType<typeof useGetFileByFilePathLazyQuery>;
+export type GetFileByFilePathQueryResult = Apollo.QueryResult<GetFileByFilePathQuery, GetFileByFilePathQueryVariables>;
 export const SearchTextDocument = gql`
     query SearchText($search: String!) {
   searchText(search: $search) {
