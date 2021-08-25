@@ -1,13 +1,18 @@
 import React from 'react'
 import SyntaxHighlighter from 'react-syntax-highlighter'
-import { File } from '../../generated/graphql'
 import { getLanguage } from '../../utils/highlight'
+import useCodeByFilePath from './useCodeByFilePath'
+import CodeLine from './CodeLine'
+import CodeLineWrapper from './CodeLineWrapper'
 
 type Props = {
-  file: File | undefined
+  projectId: number | undefined
+  filePath: string | undefined
 }
 
-const Code: React.FC<Props> = ({ file }) => {
+const Code: React.FC<Props> = ({ projectId, filePath }) => {
+  const { file } = useCodeByFilePath({ projectId, filePath })
+
   return (
     <div>
       {/*{file && file.body && (*/}
@@ -24,18 +29,16 @@ const Code: React.FC<Props> = ({ file }) => {
             <tbody>
               {file &&
                 file.body &&
-                file.body.split('\n').map((line, index) => (
-                  <tr key={`tr-${index + 1}`}>
-                    <td className="line" data-line={index + 1}>
-                      {index + 1}
-                    </td>
-                    <td className="code annotated">
-                      <SyntaxHighlighter language={getLanguage(file.extension)}>
-                        {line}
-                      </SyntaxHighlighter>
-                    </td>
-                  </tr>
-                ))}
+                file.body
+                  .split('\n')
+                  .map((line, index) => (
+                    <CodeLineWrapper
+                      key={`tr-${index + 1}`}
+                      line={line}
+                      file={file}
+                      index={index + 1}
+                    />
+                  ))}
             </tbody>
           </table>
         </code>

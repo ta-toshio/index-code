@@ -9,6 +9,8 @@ export const getLanguage = (extension: string) => {
       return 'ruby'
     case 'ts':
       return 'typescript'
+    case 'json':
+      return 'json'
     default:
       return ''
   }

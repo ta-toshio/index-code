@@ -10,6 +10,8 @@
 
     &__content {
         min-width: 500px;
+        width: 100%;
+        padding-right: 16px;
 
         & pre {
             padding: 0 !important;

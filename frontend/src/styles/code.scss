@@ -1,0 +1,22 @@
+
+.memo {
+    padding-top: 8px;
+    padding-bottom: 8px;
+
+    &__form {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        & textarea {
+            width: 100%;
+        }
+
+    }
+
+    &__actions {
+        display: flex;
+        padding-left: 1rem;
+        padding-right: 1rem;
+
+        justify-content: flex-end;
+    }
+}
