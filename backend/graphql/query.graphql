@@ -12,7 +12,17 @@ type Query {
             scopes: ["depthSort"]
         )
 
-    getFileByFilePath(project_id: Int! @eq file_path: String! @eq): File! @first
+    getFileByFilePath(
+        project_id: Int! @eq
+        file_path: String! @eq
+    ): File! @first
+
+    myMemo: [Memo!]!
+        @paginate(
+            defaultCount: 50
+            scopes: ["my"]
+        )
+        @inject(context: "user.id", name: "user_id")
 }
 
 extend type Query @guard {

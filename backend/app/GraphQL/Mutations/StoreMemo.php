@@ -7,7 +7,6 @@ use App\Repositories\FileRepository;
 use App\Repositories\MemoRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class StoreMemo
 {
