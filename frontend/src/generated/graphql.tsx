@@ -68,14 +68,42 @@ export type LoginAsGoogleInput = {
   name: Scalars['String'];
 };
 
+export type Memo = {
+  __typename?: 'Memo';
+  id: Scalars['ID'];
+  user_id: Scalars['Int'];
+  file_id: Scalars['Int'];
+  code: Scalars['String'];
+  codes?: Maybe<Scalars['String']>;
+  body?: Maybe<Scalars['String']>;
+  version: Scalars['String'];
+  created_at?: Maybe<Scalars['DateTime']>;
+  updated_at?: Maybe<Scalars['DateTime']>;
+};
+
+/** A paginated list of Memo items. */
+export type MemoPaginator = {
+  __typename?: 'MemoPaginator';
+  /** Pagination information about the list of items. */
+  paginatorInfo: PaginatorInfo;
+  /** A list of Memo items. */
+  data: Array<Memo>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
-  loginAsSocial?: Maybe<User>;
+  loginAsSocial: User;
+  storeMemo: Memo;
 };
 
 
 export type MutationLoginAsSocialArgs = {
   input: LoginAsGoogleInput;
+};
+
+
+export type MutationStoreMemoArgs = {
+  input: StoreMemoInput;
 };
 
 /** Allows ordering a list of records. */
@@ -136,6 +164,7 @@ export type Query = {
   me?: Maybe<User>;
   users?: Maybe<UserPaginator>;
   getAllFilePath?: Maybe<FilePathPaginator>;
+  myMemo?: Maybe<MemoPaginator>;
 };
 
 
@@ -163,6 +192,12 @@ export type QueryUsersArgs = {
 
 export type QueryGetAllFilePathArgs = {
   project_id: Scalars['Int'];
+  first?: Maybe<Scalars['Int']>;
+  page?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryMyMemoArgs = {
   first?: Maybe<Scalars['Int']>;
   page?: Maybe<Scalars['Int']>;
 };
@@ -198,6 +233,13 @@ export enum SortOrder {
   /** Sort records in descending order. */
   Desc = 'DESC'
 }
+
+export type StoreMemoInput = {
+  id?: Maybe<Scalars['ID']>;
+  file_id: Scalars['Int'];
+  line: Scalars['Int'];
+  body: Scalars['String'];
+};
 
 /** Specify if you want to include or exclude trashed results from a query. */
 export enum Trashed {
@@ -272,6 +314,43 @@ export type GetFileByFilePathQuery = (
   ) }
 );
 
+export type MemoFragmentFragment = (
+  { __typename?: 'Memo' }
+  & Pick<Memo, 'id' | 'user_id' | 'file_id' | 'code' | 'codes' | 'body' | 'version' | 'created_at' | 'updated_at'>
+);
+
+export type MyMemoQueryVariables = Exact<{
+  page: Scalars['Int'];
+}>;
+
+
+export type MyMemoQuery = (
+  { __typename?: 'Query' }
+  & { myMemo?: Maybe<(
+    { __typename?: 'MemoPaginator' }
+    & { data: Array<(
+      { __typename?: 'Memo' }
+      & MemoFragmentFragment
+    )>, paginatorInfo: (
+      { __typename?: 'PaginatorInfo' }
+      & PaginatorInfoFragmentFragment
+    ) }
+  )> }
+);
+
+export type StoreMemoMutationVariables = Exact<{
+  input: StoreMemoInput;
+}>;
+
+
+export type StoreMemoMutation = (
+  { __typename?: 'Mutation' }
+  & { storeMemo: (
+    { __typename?: 'Memo' }
+    & MemoFragmentFragment
+  ) }
+);
+
 export type SearchTextQueryVariables = Exact<{
   search: Scalars['String'];
 }>;
@@ -340,10 +419,10 @@ export type LoginAsSocialMutationVariables = Exact<{
 
 export type LoginAsSocialMutation = (
   { __typename?: 'Mutation' }
-  & { loginAsSocial?: Maybe<(
+  & { loginAsSocial: (
     { __typename?: 'User' }
     & UserFragmentFragment
-  )> }
+  ) }
 );
 
 export const PaginatorInfoFragmentFragmentDoc = gql`
@@ -371,6 +450,19 @@ export const FileFragmentFragmentDoc = gql`
   parent_id
   is_dir
   depth
+  created_at
+  updated_at
+}
+    `;
+export const MemoFragmentFragmentDoc = gql`
+    fragment memoFragment on Memo {
+  id
+  user_id
+  file_id
+  code
+  codes
+  body
+  version
   created_at
   updated_at
 }
@@ -470,6 +562,80 @@ export function useGetFileByFilePathLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type GetFileByFilePathQueryHookResult = ReturnType<typeof useGetFileByFilePathQuery>;
 export type GetFileByFilePathLazyQueryHookResult = ReturnType<typeof useGetFileByFilePathLazyQuery>;
 export type GetFileByFilePathQueryResult = Apollo.QueryResult<GetFileByFilePathQuery, GetFileByFilePathQueryVariables>;
+export const MyMemoDocument = gql`
+    query MyMemo($page: Int!) {
+  myMemo(page: $page) {
+    data {
+      ...memoFragment
+    }
+    paginatorInfo {
+      ...paginatorInfoFragment
+    }
+  }
+}
+    ${MemoFragmentFragmentDoc}
+${PaginatorInfoFragmentFragmentDoc}`;
+
+/**
+ * __useMyMemoQuery__
+ *
+ * To run a query within a React component, call `useMyMemoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyMemoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyMemoQuery({
+ *   variables: {
+ *      page: // value for 'page'
+ *   },
+ * });
+ */
+export function useMyMemoQuery(baseOptions: Apollo.QueryHookOptions<MyMemoQuery, MyMemoQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MyMemoQuery, MyMemoQueryVariables>(MyMemoDocument, options);
+      }
+export function useMyMemoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyMemoQuery, MyMemoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MyMemoQuery, MyMemoQueryVariables>(MyMemoDocument, options);
+        }
+export type MyMemoQueryHookResult = ReturnType<typeof useMyMemoQuery>;
+export type MyMemoLazyQueryHookResult = ReturnType<typeof useMyMemoLazyQuery>;
+export type MyMemoQueryResult = Apollo.QueryResult<MyMemoQuery, MyMemoQueryVariables>;
+export const StoreMemoDocument = gql`
+    mutation StoreMemo($input: StoreMemoInput!) {
+  storeMemo(input: $input) {
+    ...memoFragment
+  }
+}
+    ${MemoFragmentFragmentDoc}`;
+export type StoreMemoMutationFn = Apollo.MutationFunction<StoreMemoMutation, StoreMemoMutationVariables>;
+
+/**
+ * __useStoreMemoMutation__
+ *
+ * To run a mutation, you first call `useStoreMemoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStoreMemoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [storeMemoMutation, { data, loading, error }] = useStoreMemoMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useStoreMemoMutation(baseOptions?: Apollo.MutationHookOptions<StoreMemoMutation, StoreMemoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<StoreMemoMutation, StoreMemoMutationVariables>(StoreMemoDocument, options);
+      }
+export type StoreMemoMutationHookResult = ReturnType<typeof useStoreMemoMutation>;
+export type StoreMemoMutationResult = Apollo.MutationResult<StoreMemoMutation>;
+export type StoreMemoMutationOptions = Apollo.BaseMutationOptions<StoreMemoMutation, StoreMemoMutationVariables>;
 export const SearchTextDocument = gql`
     query SearchText($search: String!) {
   searchText(search: $search) {
