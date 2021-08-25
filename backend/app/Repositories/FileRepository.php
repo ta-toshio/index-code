@@ -7,7 +7,12 @@ use App\Models\File;
 class FileRepository
 {
 
-    public function storeBySplFileInfo(\SplFileInfo $file, int $projectId, string $workingDir)
+    public function findById(int $id): ?File
+    {
+        return File::find($id);
+    }
+
+    public function storeBySplFileInfo(\SplFileInfo $file, int $projectId, string $workingDir): File
     {
         $path = ltrim(str_replace($workingDir, '', $file->getPath()), DIRECTORY_SEPARATOR);
         $filePath = ltrim(str_replace($workingDir, '', $file->getRealPath()), DIRECTORY_SEPARATOR);

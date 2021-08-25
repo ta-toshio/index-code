@@ -1,0 +1,12 @@
+
+type Memo {
+    id: ID!
+    user_id: Int!
+    file_id: Int!
+    code: String!
+    codes: String
+    body: String
+    version: String!
+    created_at: DateTime
+    updated_at: DateTime
+}

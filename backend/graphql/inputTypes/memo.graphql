@@ -1,0 +1,7 @@
+
+input StoreMemoInput {
+    id: ID
+    file_id: Int!
+    line: Int!
+    body: String!
+}

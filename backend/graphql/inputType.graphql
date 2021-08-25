@@ -1,1 +1,2 @@
 #import ./inputTypes/user.graphql
+#import ./inputTypes/memo.graphql
