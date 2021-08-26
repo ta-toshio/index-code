@@ -23,6 +23,8 @@ type Query {
             scopes: ["my"]
         )
         @inject(context: "user.id", name: "user_id")
+
+    memosByFileId(file_id: Int! @eq): [Memo!]! @all(model: "\\App\\Models\\Memo")
 }
 
 extend type Query @guard {

@@ -3,6 +3,7 @@ type Memo {
     id: ID!
     user_id: Int!
     file_id: Int!
+    line: Int!
     code: String!
     codes: String
     body: String

@@ -1,13 +1,14 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useMutation } from '@apollo/client'
 import { toast } from 'react-toastify'
 import { STORE_MEMO } from '../../queries/memo'
 import {
+  Memo,
   StoreMemoMutation,
   StoreMemoMutationVariables,
 } from '../../generated/graphql'
 
-export type Memo = {
+export type CacheMemo = {
   id: number | null | undefined
   key: number
   text: string
@@ -17,14 +18,27 @@ export type Memo = {
 type Props = {
   lineNum: number
   fileId: number
+  initialMemos: Memo[]
 }
 
-const useMemoFormState = ({ lineNum, fileId }: Props) => {
-  const [memos, setMemos] = useState<Memo[]>([])
+const useMemoFormState = ({ lineNum, fileId, initialMemos }: Props) => {
+  const [memos, setMemos] = useState<CacheMemo[]>([])
   const [storeMemo] = useMutation<
     StoreMemoMutation,
     StoreMemoMutationVariables
   >(STORE_MEMO)
+
+  useEffect(() => {
+    if (initialMemos && initialMemos.length) {
+      const memos = initialMemos.map((memo, i) => ({
+        id: +memo.id,
+        key: i + 1,
+        text: memo.body,
+        submitting: false,
+      }))
+      setMemos(memos)
+    }
+  }, [initialMemos])
 
   const addMemoForm = useCallback(() => {
     setMemos((prevMemos) => {
@@ -38,7 +52,7 @@ const useMemoFormState = ({ lineNum, fileId }: Props) => {
     })
   }, [])
 
-  const onMemoChange = useCallback((memo: Memo, e) => {
+  const onMemoChange = useCallback((memo: CacheMemo, e) => {
     e.preventDefault()
     setMemos((prevMemos) => {
       const _memo = prevMemos.find((_memo) => _memo.key === memo.key)
@@ -49,7 +63,7 @@ const useMemoFormState = ({ lineNum, fileId }: Props) => {
   }, [])
 
   const onMemoSave = useCallback(
-    (memo: Memo, e) => {
+    (memo: CacheMemo, e) => {
       e.preventDefault()
       setMemos((prevMemos) => {
         const _memo = prevMemos.find((_memo) => _memo.key === memo.key)
@@ -87,7 +101,7 @@ const useMemoFormState = ({ lineNum, fileId }: Props) => {
   )
 
   const onMemoCancel = useCallback(
-    (memo: Memo, memos: Memo[], e) => {
+    (memo: CacheMemo, memos: CacheMemo[], e) => {
       e.preventDefault()
 
       if (memo.id) {

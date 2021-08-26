@@ -1,6 +1,6 @@
 import React from 'react'
 import CodeLine from './CodeLine'
-import { File } from '../../generated/graphql'
+import { File, Memo } from '../../generated/graphql'
 import useMemoFormState from './useMemoFormState'
 import CodeMemo from './CodeMemo'
 
@@ -8,11 +8,16 @@ type Props = {
   line: string
   file: File
   index: number
+  memos: Memo[]
 }
 
 const CodeLineWrapper: React.FC<Props> = (props) => {
   const { memos, addMemoForm, onMemoChange, onMemoSave, onMemoCancel } =
-    useMemoFormState({ lineNum: props.index, fileId: +props.file.id })
+    useMemoFormState({
+      lineNum: props.index,
+      fileId: +props.file.id,
+      initialMemos: props.memos,
+    })
   return (
     <>
       <CodeLine {...props} addMemoForm={addMemoForm} />

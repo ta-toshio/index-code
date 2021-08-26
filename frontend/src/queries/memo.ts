@@ -6,6 +6,7 @@ export const memoFragment = gql`
     id
     user_id
     file_id
+    line
     code
     codes
     body
@@ -28,6 +29,15 @@ export const MY_MEMO = gql`
   }
   ${memoFragment}
   ${paginatorInfoFragment}
+`
+
+export const MEMOS_BY_FILE_ID = gql`
+  query MemosByFileId($fileId: Int!) {
+    memosByFileId(file_id: $fileId) {
+      ...memoFragment
+    }
+  }
+  ${memoFragment}
 `
 
 export const STORE_MEMO = gql`

@@ -4,6 +4,7 @@ import { getLanguage } from '../../utils/highlight'
 import useCodeByFilePath from './useCodeByFilePath'
 import CodeLine from './CodeLine'
 import CodeLineWrapper from './CodeLineWrapper'
+import useMemoByFileId from './useMemoByFileId'
 
 type Props = {
   projectId: number | undefined
@@ -12,6 +13,7 @@ type Props = {
 
 const Code: React.FC<Props> = ({ projectId, filePath }) => {
   const { file } = useCodeByFilePath({ projectId, filePath })
+  const { memos } = useMemoByFileId({ fileId: +file?.id })
 
   return (
     <div>
@@ -37,6 +39,11 @@ const Code: React.FC<Props> = ({ projectId, filePath }) => {
                       line={line}
                       file={file}
                       index={index + 1}
+                      memos={
+                        (memos &&
+                          memos.filter((memo) => memo.line === index + 1)) ||
+                        []
+                      }
                     />
                   ))}
             </tbody>

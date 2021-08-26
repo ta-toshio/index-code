@@ -73,6 +73,7 @@ export type Memo = {
   id: Scalars['ID'];
   user_id: Scalars['Int'];
   file_id: Scalars['Int'];
+  line: Scalars['Int'];
   code: Scalars['String'];
   codes?: Maybe<Scalars['String']>;
   body?: Maybe<Scalars['String']>;
@@ -161,6 +162,7 @@ export type Query = {
   user?: Maybe<User>;
   searchText: Array<SearchText>;
   getFileByFilePath: File;
+  memosByFileId: Array<Memo>;
   me?: Maybe<User>;
   users?: Maybe<UserPaginator>;
   getAllFilePath?: Maybe<FilePathPaginator>;
@@ -181,6 +183,11 @@ export type QuerySearchTextArgs = {
 export type QueryGetFileByFilePathArgs = {
   project_id: Scalars['Int'];
   file_path: Scalars['String'];
+};
+
+
+export type QueryMemosByFileIdArgs = {
+  file_id: Scalars['Int'];
 };
 
 
@@ -316,7 +323,7 @@ export type GetFileByFilePathQuery = (
 
 export type MemoFragmentFragment = (
   { __typename?: 'Memo' }
-  & Pick<Memo, 'id' | 'user_id' | 'file_id' | 'code' | 'codes' | 'body' | 'version' | 'created_at' | 'updated_at'>
+  & Pick<Memo, 'id' | 'user_id' | 'file_id' | 'line' | 'code' | 'codes' | 'body' | 'version' | 'created_at' | 'updated_at'>
 );
 
 export type MyMemoQueryVariables = Exact<{
@@ -335,6 +342,19 @@ export type MyMemoQuery = (
       { __typename?: 'PaginatorInfo' }
       & PaginatorInfoFragmentFragment
     ) }
+  )> }
+);
+
+export type MemosByFileIdQueryVariables = Exact<{
+  fileId: Scalars['Int'];
+}>;
+
+
+export type MemosByFileIdQuery = (
+  { __typename?: 'Query' }
+  & { memosByFileId: Array<(
+    { __typename?: 'Memo' }
+    & MemoFragmentFragment
   )> }
 );
 
@@ -459,6 +479,7 @@ export const MemoFragmentFragmentDoc = gql`
   id
   user_id
   file_id
+  line
   code
   codes
   body
@@ -603,6 +624,41 @@ export function useMyMemoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyM
 export type MyMemoQueryHookResult = ReturnType<typeof useMyMemoQuery>;
 export type MyMemoLazyQueryHookResult = ReturnType<typeof useMyMemoLazyQuery>;
 export type MyMemoQueryResult = Apollo.QueryResult<MyMemoQuery, MyMemoQueryVariables>;
+export const MemosByFileIdDocument = gql`
+    query MemosByFileId($fileId: Int!) {
+  memosByFileId(file_id: $fileId) {
+    ...memoFragment
+  }
+}
+    ${MemoFragmentFragmentDoc}`;
+
+/**
+ * __useMemosByFileIdQuery__
+ *
+ * To run a query within a React component, call `useMemosByFileIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMemosByFileIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMemosByFileIdQuery({
+ *   variables: {
+ *      fileId: // value for 'fileId'
+ *   },
+ * });
+ */
+export function useMemosByFileIdQuery(baseOptions: Apollo.QueryHookOptions<MemosByFileIdQuery, MemosByFileIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MemosByFileIdQuery, MemosByFileIdQueryVariables>(MemosByFileIdDocument, options);
+      }
+export function useMemosByFileIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MemosByFileIdQuery, MemosByFileIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MemosByFileIdQuery, MemosByFileIdQueryVariables>(MemosByFileIdDocument, options);
+        }
+export type MemosByFileIdQueryHookResult = ReturnType<typeof useMemosByFileIdQuery>;
+export type MemosByFileIdLazyQueryHookResult = ReturnType<typeof useMemosByFileIdLazyQuery>;
+export type MemosByFileIdQueryResult = Apollo.QueryResult<MemosByFileIdQuery, MemosByFileIdQueryVariables>;
 export const StoreMemoDocument = gql`
     mutation StoreMemo($input: StoreMemoInput!) {
   storeMemo(input: $input) {
