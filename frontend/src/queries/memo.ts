@@ -48,3 +48,9 @@ export const STORE_MEMO = gql`
   }
   ${memoFragment}
 `
+
+export const DELETE_MEMO = gql`
+  mutation DeleteMemo($id: ID!) {
+    deleteMemo(id: $id)
+  }
+`

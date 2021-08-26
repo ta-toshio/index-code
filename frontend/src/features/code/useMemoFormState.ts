@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useMutation } from '@apollo/client'
 import { toast } from 'react-toastify'
-import { STORE_MEMO } from '../../queries/memo'
+import { DELETE_MEMO, STORE_MEMO } from '../../queries/memo'
 import {
+  DeleteMemoMutation,
+  DeleteMemoMutationVariables,
   Memo,
   StoreMemoMutation,
   StoreMemoMutationVariables,
@@ -27,6 +29,21 @@ const useMemoFormState = ({ lineNum, fileId, initialMemos }: Props) => {
     StoreMemoMutation,
     StoreMemoMutationVariables
   >(STORE_MEMO)
+
+  const setSubmitting = (submitting: boolean, memo: CacheMemo, callback) => {
+    setMemos((prevMemos) => {
+      const _memo = prevMemos.find((_memo) => _memo.key === memo.key)
+      if (!_memo) return prevMemos
+      _memo.submitting = submitting
+      callback && callback(_memo)
+      return [...prevMemos]
+    })
+  }
+
+  const [deleteMemo] = useMutation<
+    DeleteMemoMutation,
+    DeleteMemoMutationVariables
+  >(DELETE_MEMO)
 
   useEffect(() => {
     if (initialMemos && initialMemos.length) {
@@ -65,12 +82,7 @@ const useMemoFormState = ({ lineNum, fileId, initialMemos }: Props) => {
   const onMemoSave = useCallback(
     (memo: CacheMemo, e) => {
       e.preventDefault()
-      setMemos((prevMemos) => {
-        const _memo = prevMemos.find((_memo) => _memo.key === memo.key)
-        if (!_memo) return prevMemos
-        _memo.submitting = true
-        return [...prevMemos]
-      })
+      setSubmitting(true, memo, null)
       storeMemo({
         variables: {
           input: {
@@ -83,14 +95,12 @@ const useMemoFormState = ({ lineNum, fileId, initialMemos }: Props) => {
       })
         .then((res) => {
           if (res.data) {
-            setMemos((prevMemos) => {
-              const _memo = prevMemos.find((_memo) => _memo.key === memo.key)
-              if (!_memo) return prevMemos
-              _memo.id = +res.data.storeMemo.id
-              _memo.submitting = false
-              return [...prevMemos]
+            setSubmitting(false, memo, (targetMemo) => {
+              targetMemo.id = +res.data.storeMemo.id
             })
             toast('保存しました')
+          } else {
+            toast.error('保存に失敗しました')
           }
         })
         .catch((e) => {
@@ -104,11 +114,29 @@ const useMemoFormState = ({ lineNum, fileId, initialMemos }: Props) => {
     (memo: CacheMemo, memos: CacheMemo[], e) => {
       e.preventDefault()
 
-      if (memo.id) {
-        // @TODO delete server data
+      const removeMemoFromCache = () => {
+        const _memos = memos.filter((_memo) => _memo.key !== memo.key)
+        setMemos([..._memos])
       }
-      const _memos = memos.filter((_memo) => _memo.key !== memo.key)
-      setMemos([..._memos])
+
+      const call = async () => {
+        if (memo.id) {
+          setSubmitting(true, memo, null)
+
+          const res = await deleteMemo({ variables: { id: `${memo.id}` } })
+          if (res.data && res.data.deleteMemo) {
+            toast('削除しました')
+            removeMemoFromCache()
+          } else {
+            toast.error('削除に失敗しました')
+            setSubmitting(false, memo, null)
+          }
+        } else {
+          removeMemoFromCache()
+        }
+      }
+
+      call()
     },
     [setMemos]
   )

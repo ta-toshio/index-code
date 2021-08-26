@@ -95,6 +95,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   loginAsSocial: User;
   storeMemo: Memo;
+  deleteMemo?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -105,6 +106,11 @@ export type MutationLoginAsSocialArgs = {
 
 export type MutationStoreMemoArgs = {
   input: StoreMemoInput;
+};
+
+
+export type MutationDeleteMemoArgs = {
+  id: Scalars['ID'];
 };
 
 /** Allows ordering a list of records. */
@@ -369,6 +375,16 @@ export type StoreMemoMutation = (
     { __typename?: 'Memo' }
     & MemoFragmentFragment
   ) }
+);
+
+export type DeleteMemoMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteMemoMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteMemo'>
 );
 
 export type SearchTextQueryVariables = Exact<{
@@ -692,6 +708,37 @@ export function useStoreMemoMutation(baseOptions?: Apollo.MutationHookOptions<St
 export type StoreMemoMutationHookResult = ReturnType<typeof useStoreMemoMutation>;
 export type StoreMemoMutationResult = Apollo.MutationResult<StoreMemoMutation>;
 export type StoreMemoMutationOptions = Apollo.BaseMutationOptions<StoreMemoMutation, StoreMemoMutationVariables>;
+export const DeleteMemoDocument = gql`
+    mutation DeleteMemo($id: ID!) {
+  deleteMemo(id: $id)
+}
+    `;
+export type DeleteMemoMutationFn = Apollo.MutationFunction<DeleteMemoMutation, DeleteMemoMutationVariables>;
+
+/**
+ * __useDeleteMemoMutation__
+ *
+ * To run a mutation, you first call `useDeleteMemoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteMemoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteMemoMutation, { data, loading, error }] = useDeleteMemoMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteMemoMutation(baseOptions?: Apollo.MutationHookOptions<DeleteMemoMutation, DeleteMemoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteMemoMutation, DeleteMemoMutationVariables>(DeleteMemoDocument, options);
+      }
+export type DeleteMemoMutationHookResult = ReturnType<typeof useDeleteMemoMutation>;
+export type DeleteMemoMutationResult = Apollo.MutationResult<DeleteMemoMutation>;
+export type DeleteMemoMutationOptions = Apollo.BaseMutationOptions<DeleteMemoMutation, DeleteMemoMutationVariables>;
 export const SearchTextDocument = gql`
     query SearchText($search: String!) {
   searchText(search: $search) {
