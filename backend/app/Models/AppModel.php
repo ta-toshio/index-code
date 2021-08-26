@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|AppModel newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|AppModel query()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|AppModel sort(array $args)
  */
 class AppModel extends Model
 {

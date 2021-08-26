@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static \Illuminate\Database\Eloquent\Builder|FieldDetail whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|FieldDetail whereUserId($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|AppModel sort(array $args)
  */
 class FieldDetail extends AppModel
 {

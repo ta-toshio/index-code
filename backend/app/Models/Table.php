@@ -22,6 +22,7 @@ use Laravel\Scout\Searchable;
  * @method static \Illuminate\Database\Eloquent\Builder|Table whereProjectId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Table whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|AppModel sort(array $args)
  */
 class Table extends AppModel
 {

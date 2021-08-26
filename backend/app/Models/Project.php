@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\File[] $files
  * @property-read int|null $files_count
+ * @method static \Illuminate\Database\Eloquent\Builder|AppModel sort(array $args)
  */
 class Project extends AppModel
 {

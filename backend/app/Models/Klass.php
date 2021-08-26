@@ -36,6 +36,7 @@ use Laravel\Scout\Searchable;
  * @property-read \App\Models\File $file
  * @property string $namespace
  * @method static \Illuminate\Database\Eloquent\Builder|Klass whereNamespace($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AppModel sort(array $args)
  */
 class Klass extends AppModel
 {

@@ -27,6 +27,7 @@ use Laravel\Scout\Searchable;
  * @method static \Illuminate\Database\Eloquent\Builder|EnPost whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EnPost whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|AppModel sort(array $args)
  */
 class EnPost extends AppModel
 {

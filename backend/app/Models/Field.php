@@ -28,6 +28,7 @@ use Laravel\Scout\Searchable;
  * @method static \Illuminate\Database\Eloquent\Builder|Field whereTableName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Field whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|AppModel sort(array $args)
  */
 class Field extends AppModel
 {

@@ -32,6 +32,7 @@ use Laravel\Scout\Searchable;
  * @property-read \App\Models\Klass|null $klass
  * @property int $file_id
  * @method static \Illuminate\Database\Eloquent\Builder|Attribute whereFileId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AppModel sort(array $args)
  */
 class Attribute extends AppModel
 {

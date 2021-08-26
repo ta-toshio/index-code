@@ -45,6 +45,8 @@ use Laravel\Scout\Searchable;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Klass[] $klass
  * @property-read int|null $klass_count
  * @property-read \App\Models\Project $project
+ * @method static Builder|File depthSort(array $args)
+ * @method static \Illuminate\Database\Eloquent\Builder|AppModel sort(array $args)
  */
 class File extends AppModel
 {
