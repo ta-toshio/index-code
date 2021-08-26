@@ -11,7 +11,8 @@ type Props = {
 }
 
 const CodeLineWrapper: React.FC<Props> = (props) => {
-  const { memos, addMemoForm, onMemoChange, onMemoCancel } = useMemoFormState()
+  const { memos, addMemoForm, onMemoChange, onMemoSave, onMemoCancel } =
+    useMemoFormState({ lineNum: props.index, fileId: +props.file.id })
   return (
     <>
       <CodeLine {...props} addMemoForm={addMemoForm} />
@@ -21,6 +22,7 @@ const CodeLineWrapper: React.FC<Props> = (props) => {
             key={`memo-${i}`}
             memo={memo}
             memos={memos}
+            onMemoSave={onMemoSave}
             onMemoChange={onMemoChange}
             onMemoCancel={onMemoCancel}
           />

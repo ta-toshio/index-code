@@ -38,7 +38,9 @@ $input-shadow: none;
 
 @import '../../node_modules/bulma/bulma.sass';
 
+@import 'toast';
 @import 'screen';
 @import 'project';
 @import 'treeMenu';
 @import 'code';
+
