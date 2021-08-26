@@ -3,4 +3,6 @@ type Mutation {
     loginAsSocial(input: LoginAsGoogleInput!): User!
 
     storeMemo(input: StoreMemoInput!): Memo!
+
+    deleteMemo(id: ID!): Boolean
 }

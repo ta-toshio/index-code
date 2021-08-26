@@ -4,8 +4,20 @@ namespace App\Repositories;
 
 use App\Models\Memo;
 
-class MemoRepository
+class MemoRepository extends BaseRepository
 {
+
+    protected Memo $model;
+
+    public function __construct()
+    {
+        $this->model = new Memo();
+    }
+
+    public function model(): Memo
+    {
+        return $this->model;
+    }
 
     /**
      * @param $data
