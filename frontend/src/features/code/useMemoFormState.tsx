@@ -1,13 +1,24 @@
 import { useCallback, useState } from 'react'
 
-type Memo = {
+export type Memo = {
   id: number | null | undefined
-  key: string
+  key: number
   text: string
 }
 
 const useMemoFormState = () => {
   const [memos, setMemos] = useState<Memo[]>([])
+
+  const addMemoForm = useCallback(() => {
+    setMemos((prev) => {
+      prev.push({
+        id: null,
+        key: prev.length ? prev[prev.length - 1].key + 1 : 0,
+        text: '',
+      })
+      return [...prev]
+    })
+  }, [])
 
   const onMemoChange = useCallback((memo, e) => {
     e.preventDefault()
@@ -24,9 +35,6 @@ const useMemoFormState = () => {
 
   const onMemoCancel = useCallback((memo, memos, e) => {
     e.preventDefault()
-    console.log(memo)
-    console.log(memos)
-    console.log(e)
 
     if (memo.id) {
       // @TODO delete server data
@@ -37,7 +45,7 @@ const useMemoFormState = () => {
 
   return {
     memos,
-    setMemos,
+    addMemoForm,
     onMemoChange,
     onMemoCancel,
   }

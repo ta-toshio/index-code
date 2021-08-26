@@ -13,12 +13,12 @@ const File: NextPage = () => {
 
   return (
     <Layout>
-      <div className="explore">
-        <div className="explore__sidebar">
+      <div className="project">
+        <div className="project__sidebar">
           <Explore projectId={projectId} />
         </div>
         {/*  /explore__sidebar  */}
-        <div className="explore__content">
+        <div className="project__content">
           <Code projectId={projectId} filePath={filePath} />
         </div>
       </div>

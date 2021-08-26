@@ -1,4 +1,4 @@
-.explore {
+.project {
     display: flex;
     min-width: 967px;
 
@@ -26,3 +26,11 @@
     }
 }
 
+.code-line {
+    &__add-memo-btn {
+        float: left;
+        position: absolute;
+        left: 0;
+        line-height: 0.999rem;
+    }
+}

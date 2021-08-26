@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import CodeLine from './CodeLine'
 import { File } from '../../generated/graphql'
 import useMemoFormState from './useMemoFormState'
+import CodeMemo from './CodeMemo'
 
 type Props = {
   line: string
@@ -10,40 +11,19 @@ type Props = {
 }
 
 const CodeLineWrapper: React.FC<Props> = (props) => {
-  const { memos, setMemos, onMemoChange, onMemoCancel } = useMemoFormState()
+  const { memos, addMemoForm, onMemoChange, onMemoCancel } = useMemoFormState()
   return (
     <>
-      <tr>
-        <CodeLine {...props} setNodes={setMemos} />
-      </tr>
+      <CodeLine {...props} addMemoForm={addMemoForm} />
       {(memos &&
         memos.map((memo, i) => (
-          <tr key={`memo-${i}`}>
-            <td colSpan={2}>
-              <div className="memo">
-                <div className="memo__form">
-                  <div className="field">
-                    <div className="control">
-                      <textarea
-                        className="textarea is-large"
-                        value={memo.text}
-                        onChange={onMemoChange.bind(this, memo)}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="memo__actions">
-                  <button
-                    className="button"
-                    onClick={onMemoCancel.bind(this, memo, memos)}
-                  >
-                    cancel
-                  </button>
-                  <button className="button is-primary">save</button>
-                </div>
-              </div>
-            </td>
-          </tr>
+          <CodeMemo
+            key={`memo-${i}`}
+            memo={memo}
+            memos={memos}
+            onMemoChange={onMemoChange}
+            onMemoCancel={onMemoCancel}
+          />
         ))) ||
         undefined}
     </>

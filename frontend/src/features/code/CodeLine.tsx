@@ -7,13 +7,13 @@ type Props = {
   line: string
   file: File
   index: number
-  setNodes: any
+  addMemoForm: () => void
 }
 
-const CodeLine: React.FC<Props> = ({ line, file, index, setNodes }) => {
+const CodeLine: React.FC<Props> = ({ line, file, index, addMemoForm }) => {
   const [isHover, setIsHover] = useState<boolean>(false)
   return (
-    <>
+    <tr className="code-line">
       <td className="line">{index}</td>
       <td
         style={{ position: 'relative' }}
@@ -22,24 +22,7 @@ const CodeLine: React.FC<Props> = ({ line, file, index, setNodes }) => {
         onMouseLeave={() => setIsHover(false)}
       >
         {isHover && (
-          <button
-            onClick={() =>
-              setNodes((prev) => {
-                prev.push({
-                  id: null,
-                  key: prev.length ? prev[prev.length - 1].key + 1 : 0,
-                  text: '',
-                })
-                return [...prev]
-              })
-            }
-            style={{
-              float: 'left',
-              position: 'absolute',
-              left: 0,
-              lineHeight: '0.999rem',
-            }}
-          >
+          <button className="code-line__add-memo-btn" onClick={addMemoForm}>
             +
           </button>
         )}
@@ -47,7 +30,7 @@ const CodeLine: React.FC<Props> = ({ line, file, index, setNodes }) => {
           {line}
         </SyntaxHighlighter>
       </td>
-    </>
+    </tr>
   )
 }
 
