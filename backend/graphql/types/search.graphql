@@ -7,3 +7,9 @@ type SearchText {
     score: Float!
 }
 
+interface SearchProgram {
+    id: ID!
+    search_title: String!
+    search_subtitle: String!
+    highlight: String
+}

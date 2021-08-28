@@ -49,7 +49,7 @@ class Field extends AppModel
 
     public function toSearchableArray(): array
     {
-        $subtitle = $this->table->project->name;
+        $subtitle = $this->table()->first()->project->name;
         return array_merge(
             $this->attributesToArray(),
             [

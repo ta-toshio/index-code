@@ -5,7 +5,7 @@ type Query {
 
     searchText(search: String!): [SearchText!]!
 
-    searchTitle(search: String!): [SearchProgram!]!
+    searchTitle(search: String! type: String!): [SearchProgram!]!
 
     getAllFilePath(project_id: Int! @eq): [FilePath!]!
         @paginate(

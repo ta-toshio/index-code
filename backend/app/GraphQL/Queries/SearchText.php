@@ -3,6 +3,7 @@
 namespace App\GraphQL\Queries;
 
 use App\Models\Attribute;
+use App\Models\Code;
 use App\Models\Field;
 use App\Models\File;
 use App\Models\Klass;
@@ -23,12 +24,13 @@ class SearchText
         $result = File::wildcardSearch()
             ->join(Klass::class)
             ->join(Attribute::class)
+            ->join(Code::class)
             ->join(Field::class)
             ->join(Table::class)
             ->field('search_title')
             ->value('*' . $search . '*')
 //            ->query($search)
-            ->highlight('search')
+            ->highlight('search_title')
             ->size(100)
             ->execute();
 
