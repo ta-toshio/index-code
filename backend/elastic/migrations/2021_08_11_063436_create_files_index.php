@@ -17,7 +17,8 @@ final class CreateFilesIndex implements MigrationInterface
     public function up(): void
     {
         Index::create('files', function (Mapping $mapping, Settings $settings) {
-            $this->applyCodeAnalyzer($settings);
+            $this->applyAnalysis($settings);
+
             $mapping->text('search_title', [
                 'analyzer' => 'path_analyzer',
                 'fields' => [

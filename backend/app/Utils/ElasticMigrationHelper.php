@@ -8,33 +8,11 @@ use ElasticAdapter\Indices\Settings;
 trait ElasticMigrationHelper
 {
 
-    public function applyNounNgram(Settings $settings)
+    public function applyAnalysis(Settings $settings)
     {
         $settings->index([
             'max_ngram_diff' => 10,
         ]);
-        $settings->analysis([
-            'filter' => [
-                'my_ngram' => [
-                    'type' => 'ngram',
-                    'min_gram' => 3,
-                    'max_gram' => 10
-                ]
-            ],
-            'analyzer' => [
-                'standard_ngram' => [
-                    'tokenizer' => 'standard',
-                    'filter' => [
-                        'my_ngram',
-                        'lowercase',
-                    ]
-                ]
-            ]
-        ]);
-    }
-
-    public function applyCodeAnalyzer(Settings $settings)
-    {
         $settings->analysis([
             'analyzer' => [
                 'content_analyzer' => [
@@ -52,6 +30,25 @@ trait ElasticMigrationHelper
                     'tokenizer' => 'path_hierarchy_tokenizer',
                     'filter' => ['lowercase'],
                 ],
+                'lowercase_analyzer' => [
+                    'type' => 'custom',
+                    'filter' => ['lowercase'],
+                    'tokenizer' => 'keyword',
+                ],
+                'standard_ngram' => [
+                    'tokenizer' => 'standard',
+                    'filter' => [
+                        'my_ngram',
+                        'lowercase',
+                    ]
+                ]
+            ],
+            'filter' => [
+                'my_ngram' => [
+                    'type' => 'ngram',
+                    'min_gram' => 3,
+                    'max_gram' => 10
+                ]
             ],
             'char_filter' => [
                 'content_char_filter' => [
@@ -71,25 +68,6 @@ trait ElasticMigrationHelper
                     'reverse' => 'true',
                 ],
             ],
-        ]);
-    }
-
-    public function setSearchTitle(Mapping $mapping)
-    {
-        $mapping->text('search_title', [
-            'analyzer' => 'content_analyzer'
-        ]);
-        $mapping->text('search_subtitle', [
-            'analyzer' => 'path_analyzer',
-            'fields' => [
-                'hierarchy' => [
-                    'type' => 'text',
-                    'analyzer' => 'path_hierarchy_analyzer',
-                ],
-                'keyword' => [
-                    'type' => 'keyword',
-                ],
-            ]
         ]);
     }
 

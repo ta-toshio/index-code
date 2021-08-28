@@ -17,9 +17,14 @@ final class CreateTablesIndex implements MigrationInterface
     public function up(): void
     {
         Index::create('tables', function (Mapping $mapping, Settings $settings) {
-            $this->applyCodeAnalyzer($settings);
-            $mapping->text('search_title');
-            $mapping->text('search_subtitle');
+            $this->applyAnalysis($settings);
+
+            $mapping->text('search_title', [
+                'analyzer' => 'content_analyzer',
+            ]);
+            $mapping->text('search_subtitle', [
+                'analyzer' => 'content_analyzer',
+            ]);
 
             $mapping->integer('project_id');
             $mapping->text('name',

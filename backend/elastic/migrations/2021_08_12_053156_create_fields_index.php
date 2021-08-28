@@ -17,9 +17,14 @@ final class CreateFieldsIndex implements MigrationInterface
     public function up(): void
     {
         Index::create('fields', function (Mapping $mapping, Settings $settings) {
-            $this->applyCodeAnalyzer($settings);
-            $mapping->text('search_title');
-            $mapping->text('search_subtitle');
+            $this->applyAnalysis($settings);
+
+            $mapping->text('search_title', [
+                'analyzer' => 'content_analyzer',
+            ]);
+            $mapping->text('search_subtitle', [
+                'analyzer' => 'content_analyzer',
+            ]);
 
             $mapping->integer('table_id');
             $mapping->text('table_name',
