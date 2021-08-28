@@ -1,5 +1,5 @@
 #import ./types/app.graphql
 #import ./types/user.graphql
 #import ./types/search.graphql
-#import ./types/file.graphql
+#import ./types/program.graphql
 #import ./types/memo.graphql

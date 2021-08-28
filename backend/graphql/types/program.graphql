@@ -1,0 +1,91 @@
+type File implements SearchProgram {
+    id: ID!
+    project_id: Int!
+    name: String!
+    file_path: String!
+    path: String
+    body: String
+    extension: String
+    description: String
+    parent_id: Int
+    is_dir: Boolean!
+    depth: Int!
+    created_at: DateTime
+    updated_at: DateTime
+    search_title: String!
+    search_subtitle: String!
+}
+
+type FilePath {
+    id: ID!
+    project_id: Int!
+    name: String!
+    file_path: String!
+    path: String
+    extension: String
+    parent_id: Int
+    is_dir: Boolean!
+    depth: Int!
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type Attribute implements SearchProgram {
+    id: ID!
+    file_id: Int!
+    klass_id: Int
+    name: String!
+    type: String!
+    start_line: Int!
+    description: String
+    created_at: DateTime
+    updated_at: DateTime
+    search_title: String!
+    search_subtitle: String!
+}
+
+type Code implements SearchProgram {
+    id: ID!
+    file_id: Int!
+    body: String
+    created_at: DateTime
+    updated_at: DateTime
+    search_title: String!
+    search_subtitle: String!
+}
+
+type Klass implements SearchProgram {
+    id: ID!
+    file_id: Int!
+    name: String!
+    namespace: String!
+    description: String
+    existing: Int!
+    created_at: DateTime
+    updated_at: DateTime
+    search_title: String!
+    search_subtitle: String!
+}
+
+type Table implements SearchProgram {
+    id: ID!
+    project_id: Int!
+    name: String!
+    created_at: DateTime
+    updated_at: DateTime
+    search_title: String!
+    search_subtitle: String!
+}
+
+type Field implements SearchProgram {
+    id: ID!
+    table_id: Int!
+    table_name: String!
+    field_name: String!
+    field_type: String!
+    created_at: DateTime
+    updated_at: DateTime
+    search_title: String!
+    search_subtitle: String!
+}
+
