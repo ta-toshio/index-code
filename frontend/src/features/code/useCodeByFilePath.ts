@@ -1,32 +1,37 @@
 import { useEffect } from 'react'
 import { useLazyQuery } from '@apollo/client'
 import {
-  GetFileByFilePathQuery,
-  GetFileByFilePathQueryVariables,
+  GetFileByFilePathAndProjectNameQuery,
+  GetFileByFilePathAndProjectNameQueryVariables,
 } from '../../generated/graphql'
-import { GET_FILE_BY_FILE_PATH } from '../../queries/file'
+import { GET_FILE_BY_FILE_PATH_AND_PROJECT_NAME } from '../../queries/file'
 
-const useCodeByFilePath = ({ projectId, filePath }) => {
+type Props = {
+  projectName: string | undefined
+  filePath: string | undefined
+}
+
+const useCodeByFilePath = ({ projectName, filePath }: Props) => {
   const [fetchFile, { called, loading, data }] = useLazyQuery<
-    GetFileByFilePathQuery,
-    GetFileByFilePathQueryVariables
-  >(GET_FILE_BY_FILE_PATH)
+    GetFileByFilePathAndProjectNameQuery,
+    GetFileByFilePathAndProjectNameQueryVariables
+  >(GET_FILE_BY_FILE_PATH_AND_PROJECT_NAME)
 
   useEffect(() => {
-    if (projectId && filePath) {
+    if (projectName && filePath) {
       fetchFile({
         variables: {
-          projectId: +projectId,
+          projectName: projectName,
           filePath,
         },
       })
     }
-  }, [projectId, filePath])
+  }, [projectName, filePath])
 
   return {
     called,
     loading,
-    file: data && data.getFileByFilePath,
+    file: data && data.getFileByFilePathAndProjectName,
   }
 }
 

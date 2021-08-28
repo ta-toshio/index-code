@@ -85,7 +85,10 @@ const Top: React.FC = () => {
                   key={`search-text-data-${searchTextData.__typename}-${searchTextData.id}`}
                 >
                   <Link
-                    href={getLinkFromSearchPath(searchTextData.search_subtitle)}
+                    href={
+                      '/projects' +
+                      getLinkFromSearchPath(searchTextData.search_subtitle)
+                    }
                   >
                     <a>
                       <div className="title is-4">

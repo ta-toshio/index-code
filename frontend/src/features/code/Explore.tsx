@@ -8,13 +8,12 @@ const ICON_SIZE = 2
 const LEVEL_SPACE = 0.75
 
 type Props = {
-  projectId: number | undefined
+  projectName: string | undefined
 }
 
-const Explore: React.FC<Props> = ({ projectId }) => {
+const Explore: React.FC<Props> = ({ projectName }) => {
   const router = useRouter()
-
-  const { tree } = useFilePath({ projectId })
+  const { tree } = useFilePath({ projectName })
 
   return (
     <TreeMenu
@@ -23,7 +22,7 @@ const Explore: React.FC<Props> = ({ projectId }) => {
       onClickItem={({ hasNodes, level, key }) => {
         if (!hasNodes) {
           if (level === 0) {
-            router.push(`/projects/${projectId}/${key}`)
+            router.push(`/projects/${encodeURIComponent(projectName)}/${key}`)
             return
           }
 
@@ -31,7 +30,9 @@ const Explore: React.FC<Props> = ({ projectId }) => {
             .split('/')
             .slice(-1 * level - 1)
             .join('/')
-          router.push(`/projects/${projectId}/${pathPart}`)
+          router.push(
+            `/projects/${encodeURIComponent(projectName)}/${pathPart}`
+          )
         }
       }}
     >

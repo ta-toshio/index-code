@@ -1,33 +1,37 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLazyQuery } from '@apollo/client'
-import { GET_ALL_FILE_PATH } from '../../queries/file'
+import { GET_ALL_FILE_PATH_BY_PROJECT_NAME } from '../../queries/file'
 import {
-  GetAllFilePathQuery,
-  GetAllFilePathQueryVariables,
+  GetAllFilePathByProjectNameQuery,
+  GetAllFilePathByProjectNameQueryVariables,
 } from '../../generated/graphql'
 import { makeTree } from '../../utils/tree'
 
-const useFilePath = ({ projectId }) => {
+type Props = {
+  projectName: string | undefined
+}
+
+const useFilePath = ({ projectName }: Props) => {
   const [page] = useState<number>(1)
   const [fetchFilePath, { called, loading, data }] = useLazyQuery<
-    GetAllFilePathQuery,
-    GetAllFilePathQueryVariables
-  >(GET_ALL_FILE_PATH)
+    GetAllFilePathByProjectNameQuery,
+    GetAllFilePathByProjectNameQueryVariables
+  >(GET_ALL_FILE_PATH_BY_PROJECT_NAME)
 
   useEffect(() => {
-    if (projectId) {
-      fetchFilePath({ variables: { projectId: +projectId, page } })
+    if (projectName) {
+      fetchFilePath({ variables: { projectName: projectName, page } })
     }
-  }, [fetchFilePath, page, projectId])
+  }, [fetchFilePath, page, projectName])
 
   const tree = useMemo(() => {
-    if (!data || !data.getAllFilePath.data) {
+    if (!data || !data.getAllFilePathByProjectName.data) {
       return []
     }
-    return data.getAllFilePath.data
+    return data.getAllFilePathByProjectName.data
       .filter((filePath) => filePath.depth === 0)
       .map((filePath) => {
-        return makeTree(data.getAllFilePath.data, filePath, 0)
+        return makeTree(data.getAllFilePathByProjectName.data, filePath, 0)
       })
   }, [data])
 

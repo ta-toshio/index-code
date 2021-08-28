@@ -130,4 +130,11 @@ class File extends AppModel
             ->orderBy('name', 'ASC');
     }
 
+    public function scopeProjectName(Builder $query, array $args): Builder
+    {
+        $projectName = $args['project_name'] ?? null;
+        $project = Project::query()->where('name', $projectName)->firstOrFail();
+        return $query->where('project_id', $project->id);
+    }
+
 }

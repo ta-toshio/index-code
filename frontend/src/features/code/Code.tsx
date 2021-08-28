@@ -7,12 +7,12 @@ import CodeLineWrapper from './CodeLineWrapper'
 import useMemoByFileId from './useMemoByFileId'
 
 type Props = {
-  projectId: number | undefined
+  projectName: string | undefined
   filePath: string | undefined
 }
 
-const Code: React.FC<Props> = ({ projectId, filePath }) => {
-  const { file } = useCodeByFilePath({ projectId, filePath })
+const Code: React.FC<Props> = ({ projectName, filePath }) => {
+  const { file } = useCodeByFilePath({ projectName, filePath })
   const { memos } = useMemoByFileId({ fileId: +file?.id })
 
   return (

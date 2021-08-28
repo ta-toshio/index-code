@@ -14,10 +14,22 @@ type Query {
             scopes: ["depthSort"]
         )
 
+    getAllFilePathByProjectName(project_name: String!): [FilePath!]!
+        @paginate(
+            defaultCount: 5000
+            model: "\\App\\Models\\File"
+            scopes: ["depthSort", "projectName"]
+        )
+
     getFileByFilePath(
         project_id: Int! @eq
         file_path: String! @eq
     ): File! @first
+
+    getFileByFilePathAndProjectName(
+        project_name: String!
+        file_path: String! @eq
+    ): File! @first(scopes: ["projectName"])
 
     myMemo: [Memo!]!
         @paginate(

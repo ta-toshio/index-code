@@ -12,8 +12,8 @@ type File implements SearchProgram {
     depth: Int!
     created_at: DateTime
     updated_at: DateTime
-    search_title: String!
-    search_subtitle: String!
+    search_title: String
+    search_subtitle: String
     highlight: String
 }
 
@@ -41,8 +41,8 @@ type Attribute implements SearchProgram {
     description: String
     created_at: DateTime
     updated_at: DateTime
-    search_title: String!
-    search_subtitle: String!
+    search_title: String
+    search_subtitle: String
     highlight: String
 }
 
@@ -52,8 +52,8 @@ type Code implements SearchProgram {
     body: String
     created_at: DateTime
     updated_at: DateTime
-    search_title: String!
-    search_subtitle: String!
+    search_title: String
+    search_subtitle: String
     highlight: String
 }
 
@@ -66,8 +66,8 @@ type Klass implements SearchProgram {
     existing: Int!
     created_at: DateTime
     updated_at: DateTime
-    search_title: String!
-    search_subtitle: String!
+    search_title: String
+    search_subtitle: String
     highlight: String
 }
 
@@ -90,8 +90,8 @@ type Field implements SearchProgram {
     field_type: String!
     created_at: DateTime
     updated_at: DateTime
-    search_title: String!
-    search_subtitle: String!
+    search_title: String
+    search_subtitle: String
     highlight: String
 }
 
