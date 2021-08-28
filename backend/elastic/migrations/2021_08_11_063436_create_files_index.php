@@ -17,11 +17,32 @@ final class CreateFilesIndex implements MigrationInterface
     public function up(): void
     {
         Index::create('files', function (Mapping $mapping, Settings $settings) {
-            $this->applyNounNgram($settings);
-
-            $mapping->text('search', [
-                'analyzer' => 'standard_ngram'
+            $this->applyCodeAnalyzer($settings);
+            $mapping->text('search_title', [
+                'analyzer' => 'path_analyzer',
+                'fields' => [
+                    'hierarchy' => [
+                        'type' => 'text',
+                        'analyzer' => 'path_hierarchy_analyzer',
+                    ],
+                    'keyword' => [
+                        'type' => 'keyword',
+                    ],
+                ]
             ]);
+            $mapping->text('search_subtitle', [
+                'analyzer' => 'path_analyzer',
+                'fields' => [
+                    'hierarchy' => [
+                        'type' => 'text',
+                        'analyzer' => 'path_hierarchy_analyzer',
+                    ],
+                    'keyword' => [
+                        'type' => 'keyword',
+                    ],
+                ]
+            ]);
+
             $mapping->integer('project_id');
             $mapping->text('name',
                 [

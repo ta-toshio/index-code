@@ -17,11 +17,31 @@ final class CreateKlassesIndex implements MigrationInterface
     public function up(): void
     {
         Index::create('klasses', function (Mapping $mapping, Settings $settings) {
-            $this->applyNounNgram($settings);
+            $this->applyCodeAnalyzer($settings);
+            $mapping->text('search_title',
+                [
+                    'fields' => [
+                        'keyword' => [
+                            'type' => 'keyword',
+                            'ignore_above' => 256,
+                        ]
+                    ]
 
-            $mapping->text('search', [
-                'analyzer' => 'standard_ngram'
+                ]
+            );
+            $mapping->text('search_subtitle', [
+                'analyzer' => 'path_analyzer',
+                'fields' => [
+                    'hierarchy' => [
+                        'type' => 'text',
+                        'analyzer' => 'path_hierarchy_analyzer',
+                    ],
+                    'keyword' => [
+                        'type' => 'keyword',
+                    ],
+                ]
             ]);
+
             $mapping->integer('file_id');
             $mapping->text('name',
                 [

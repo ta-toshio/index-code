@@ -17,12 +17,31 @@ final class CreateAttributesIndex implements MigrationInterface
     public function up(): void
     {
         Index::create('attributes', function (Mapping $mapping, Settings $settings) {
+            $this->applyCodeAnalyzer($settings);
+            $mapping->text('search_title',
+                [
+                    'fields' => [
+                        'keyword' => [
+                            'type' => 'keyword',
+                            'ignore_above' => 256,
+                        ]
+                    ]
 
-            $this->applyNounNgram($settings);
-
-            $mapping->text('search', [
-                'analyzer' => 'standard_ngram'
+                ]
+            );
+            $mapping->text('search_subtitle', [
+                'analyzer' => 'path_analyzer',
+                'fields' => [
+                    'hierarchy' => [
+                        'type' => 'text',
+                        'analyzer' => 'path_hierarchy_analyzer',
+                    ],
+                    'keyword' => [
+                        'type' => 'keyword',
+                    ],
+                ]
             ]);
+
             $mapping->integer('file_id');
             $mapping->integer('klass_id');
             $mapping->text('name',

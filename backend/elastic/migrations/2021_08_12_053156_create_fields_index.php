@@ -17,11 +17,9 @@ final class CreateFieldsIndex implements MigrationInterface
     public function up(): void
     {
         Index::create('fields', function (Mapping $mapping, Settings $settings) {
-            $this->applyNounNgram($settings);
-
-            $mapping->text('search', [
-                'analyzer' => 'standard_ngram'
-            ]);
+            $this->applyCodeAnalyzer($settings);
+            $mapping->text('search_title');
+            $mapping->text('search_subtitle');
 
             $mapping->integer('table_id');
             $mapping->text('table_name',
