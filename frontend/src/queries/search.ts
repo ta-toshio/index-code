@@ -11,3 +11,15 @@ export const SEARCH_TEXT = gql`
     }
   }
 `
+
+export const SEARCH_TITLE = gql`
+  query SearchTitle($search: String!, $type: String!) {
+    searchTitle(search: $search, type: $type) {
+      id
+      search_title
+      search_subtitle
+      highlight
+      __typename
+    }
+  }
+`

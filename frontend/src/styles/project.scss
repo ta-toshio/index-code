@@ -34,3 +34,10 @@
         line-height: 0.999rem;
     }
 }
+
+
+.search-title {
+    & .control {
+        margin-top: 16px;
+    }
+}

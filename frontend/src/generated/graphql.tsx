@@ -18,9 +18,51 @@ export type Scalars = {
   DateTime: any;
 };
 
+export type Attribute = SearchProgram & {
+  __typename?: 'Attribute';
+  id: Scalars['ID'];
+  file_id: Scalars['Int'];
+  klass_id?: Maybe<Scalars['Int']>;
+  name: Scalars['String'];
+  type: Scalars['String'];
+  start_line: Scalars['Int'];
+  description?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['DateTime']>;
+  updated_at?: Maybe<Scalars['DateTime']>;
+  search_title: Scalars['String'];
+  search_subtitle: Scalars['String'];
+  highlight?: Maybe<Scalars['String']>;
+};
+
+export type Code = SearchProgram & {
+  __typename?: 'Code';
+  id: Scalars['ID'];
+  file_id: Scalars['Int'];
+  body?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['DateTime']>;
+  updated_at?: Maybe<Scalars['DateTime']>;
+  search_title: Scalars['String'];
+  search_subtitle: Scalars['String'];
+  highlight?: Maybe<Scalars['String']>;
+};
 
 
-export type File = {
+
+export type Field = SearchProgram & {
+  __typename?: 'Field';
+  id: Scalars['ID'];
+  table_id: Scalars['Int'];
+  table_name: Scalars['String'];
+  field_name: Scalars['String'];
+  field_type: Scalars['String'];
+  created_at?: Maybe<Scalars['DateTime']>;
+  updated_at?: Maybe<Scalars['DateTime']>;
+  search_title: Scalars['String'];
+  search_subtitle: Scalars['String'];
+  highlight?: Maybe<Scalars['String']>;
+};
+
+export type File = SearchProgram & {
   __typename?: 'File';
   id: Scalars['ID'];
   project_id: Scalars['Int'];
@@ -35,6 +77,9 @@ export type File = {
   depth: Scalars['Int'];
   created_at?: Maybe<Scalars['DateTime']>;
   updated_at?: Maybe<Scalars['DateTime']>;
+  search_title: Scalars['String'];
+  search_subtitle: Scalars['String'];
+  highlight?: Maybe<Scalars['String']>;
 };
 
 export type FilePath = {
@@ -59,6 +104,21 @@ export type FilePathPaginator = {
   paginatorInfo: PaginatorInfo;
   /** A list of FilePath items. */
   data: Array<FilePath>;
+};
+
+export type Klass = SearchProgram & {
+  __typename?: 'Klass';
+  id: Scalars['ID'];
+  file_id: Scalars['Int'];
+  name: Scalars['String'];
+  namespace: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  existing: Scalars['Int'];
+  created_at?: Maybe<Scalars['DateTime']>;
+  updated_at?: Maybe<Scalars['DateTime']>;
+  search_title: Scalars['String'];
+  search_subtitle: Scalars['String'];
+  highlight?: Maybe<Scalars['String']>;
 };
 
 export type LoginAsGoogleInput = {
@@ -167,6 +227,7 @@ export type Query = {
   __typename?: 'Query';
   user?: Maybe<User>;
   searchText: Array<SearchText>;
+  searchTitle: Array<SearchProgram>;
   getFileByFilePath: File;
   memosByFileId: Array<Memo>;
   me?: Maybe<User>;
@@ -183,6 +244,12 @@ export type QueryUserArgs = {
 
 export type QuerySearchTextArgs = {
   search: Scalars['String'];
+};
+
+
+export type QuerySearchTitleArgs = {
+  search: Scalars['String'];
+  type: Scalars['String'];
 };
 
 
@@ -213,6 +280,13 @@ export type QueryGetAllFilePathArgs = {
 export type QueryMyMemoArgs = {
   first?: Maybe<Scalars['Int']>;
   page?: Maybe<Scalars['Int']>;
+};
+
+export type SearchProgram = {
+  id: Scalars['ID'];
+  search_title: Scalars['String'];
+  search_subtitle: Scalars['String'];
+  highlight?: Maybe<Scalars['String']>;
 };
 
 export type SearchText = {
@@ -252,6 +326,18 @@ export type StoreMemoInput = {
   file_id: Scalars['Int'];
   line: Scalars['Int'];
   body: Scalars['String'];
+};
+
+export type Table = SearchProgram & {
+  __typename?: 'Table';
+  id: Scalars['ID'];
+  project_id: Scalars['Int'];
+  name: Scalars['String'];
+  created_at?: Maybe<Scalars['DateTime']>;
+  updated_at?: Maybe<Scalars['DateTime']>;
+  search_title: Scalars['String'];
+  search_subtitle: Scalars['String'];
+  highlight?: Maybe<Scalars['String']>;
 };
 
 /** Specify if you want to include or exclude trashed results from a query. */
@@ -397,6 +483,35 @@ export type SearchTextQuery = (
   & { searchText: Array<(
     { __typename?: 'SearchText' }
     & Pick<SearchText, 'id' | 'index_name' | 'text' | 'highlight' | 'score'>
+  )> }
+);
+
+export type SearchTitleQueryVariables = Exact<{
+  search: Scalars['String'];
+  type: Scalars['String'];
+}>;
+
+
+export type SearchTitleQuery = (
+  { __typename?: 'Query' }
+  & { searchTitle: Array<(
+    { __typename: 'Attribute' }
+    & Pick<Attribute, 'id' | 'search_title' | 'search_subtitle' | 'highlight'>
+  ) | (
+    { __typename: 'Code' }
+    & Pick<Code, 'id' | 'search_title' | 'search_subtitle' | 'highlight'>
+  ) | (
+    { __typename: 'Field' }
+    & Pick<Field, 'id' | 'search_title' | 'search_subtitle' | 'highlight'>
+  ) | (
+    { __typename: 'File' }
+    & Pick<File, 'id' | 'search_title' | 'search_subtitle' | 'highlight'>
+  ) | (
+    { __typename: 'Klass' }
+    & Pick<Klass, 'id' | 'search_title' | 'search_subtitle' | 'highlight'>
+  ) | (
+    { __typename: 'Table' }
+    & Pick<Table, 'id' | 'search_title' | 'search_subtitle' | 'highlight'>
   )> }
 );
 
@@ -778,6 +893,46 @@ export function useSearchTextLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type SearchTextQueryHookResult = ReturnType<typeof useSearchTextQuery>;
 export type SearchTextLazyQueryHookResult = ReturnType<typeof useSearchTextLazyQuery>;
 export type SearchTextQueryResult = Apollo.QueryResult<SearchTextQuery, SearchTextQueryVariables>;
+export const SearchTitleDocument = gql`
+    query SearchTitle($search: String!, $type: String!) {
+  searchTitle(search: $search, type: $type) {
+    id
+    search_title
+    search_subtitle
+    highlight
+    __typename
+  }
+}
+    `;
+
+/**
+ * __useSearchTitleQuery__
+ *
+ * To run a query within a React component, call `useSearchTitleQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchTitleQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchTitleQuery({
+ *   variables: {
+ *      search: // value for 'search'
+ *      type: // value for 'type'
+ *   },
+ * });
+ */
+export function useSearchTitleQuery(baseOptions: Apollo.QueryHookOptions<SearchTitleQuery, SearchTitleQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchTitleQuery, SearchTitleQueryVariables>(SearchTitleDocument, options);
+      }
+export function useSearchTitleLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchTitleQuery, SearchTitleQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchTitleQuery, SearchTitleQueryVariables>(SearchTitleDocument, options);
+        }
+export type SearchTitleQueryHookResult = ReturnType<typeof useSearchTitleQuery>;
+export type SearchTitleLazyQueryHookResult = ReturnType<typeof useSearchTitleLazyQuery>;
+export type SearchTitleQueryResult = Apollo.QueryResult<SearchTitleQuery, SearchTitleQueryVariables>;
 export const UsersDocument = gql`
     query Users($page: Int!) {
   users(page: $page) {

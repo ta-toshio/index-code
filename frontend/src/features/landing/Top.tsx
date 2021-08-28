@@ -1,16 +1,25 @@
 import React from 'react'
 import Layout from '../../components/Layout'
-import useSearchText from '../search/useSearchText'
+// import useSearchText from '../search/useSearchText'
+import useSearchTitle, { SEARCH_TITLE_TYPE } from '../search/useSearchTitle'
 import { CircleLoadingIcon } from '../../components/icon/SvgIcon'
 import Link from 'next/link'
+import { getLinkFromSearchPath } from '../../utils/appUtil'
 
 const Top: React.FC = () => {
-  const { searchText, called, loading, data, setSearchTextDebounce } =
-    useSearchText()
+  const {
+    searchTitle,
+    called,
+    loading,
+    data,
+    setSearchTitleDebounce,
+    radioValue,
+    setRadioValue,
+  } = useSearchTitle()
 
   return (
     <Layout title="Home | Next.js + TypeScript Example">
-      <section className="hero is-info">
+      <section className="hero is-info search-title">
         <div className="hero-body">
           <div className="container">
             <div className="card">
@@ -21,7 +30,7 @@ const Top: React.FC = () => {
                       className="input is-large"
                       type="text"
                       placeholder=""
-                      onChange={(e) => setSearchTextDebounce(e.target.value)}
+                      onChange={(e) => setSearchTitleDebounce(e.target.value)}
                     />
                     <span className="icon is-medium is-left">
                       <i className="fa fa-search" />
@@ -33,6 +42,32 @@ const Top: React.FC = () => {
                 </div>
               </div>
             </div>
+            <div className="control">
+              <label className="radio">
+                <input
+                  type="radio"
+                  name="type"
+                  value={SEARCH_TITLE_TYPE.name}
+                  checked={SEARCH_TITLE_TYPE.name === radioValue}
+                  onChange={(e) => {
+                    setRadioValue(e.currentTarget.value)
+                  }}
+                />
+                Name
+              </label>
+              <label className="radio">
+                <input
+                  type="radio"
+                  name="type"
+                  value={SEARCH_TITLE_TYPE.code}
+                  checked={SEARCH_TITLE_TYPE.code === radioValue}
+                  onChange={(e) => {
+                    setRadioValue(e.currentTarget.value)
+                  }}
+                />
+                Code
+              </label>
+            </div>
           </div>
         </div>
       </section>
@@ -41,26 +76,30 @@ const Top: React.FC = () => {
           <div className="content is-medium pt-3">
             <h3 className="title is-3">Results</h3>
             {called && loading && <CircleLoadingIcon />}
-            {searchText &&
+            {searchTitle &&
               data &&
-              data.searchText &&
-              data.searchText.map((searchTextData) => (
+              data.searchTitle &&
+              data.searchTitle.map((searchTextData) => (
                 <div
                   className="box"
-                  key={`search-text-data-${searchTextData.index_name}-${searchTextData.id}`}
+                  key={`search-text-data-${searchTextData.__typename}-${searchTextData.id}`}
                 >
-                  <Link href={`/projects/1/${searchTextData.id}/a/b.php`}>
+                  <Link
+                    href={getLinkFromSearchPath(searchTextData.search_subtitle)}
+                  >
                     <a>
-                      <span className="title is-3">
-                        {searchTextData.index_name}
-                      </span>
+                      <div className="title is-4">
+                        {searchTextData.__typename}
+                      </div>
+                      <div className="title is-6">
+                        {searchTextData.search_subtitle}
+                      </div>
                       <pre>
-                        <code
-                          className="language-javascript"
-                          dangerouslySetInnerHTML={{
-                            __html: searchTextData.highlight,
-                          }}
-                        />
+                        <code>
+                          {searchTextData.highlight
+                            .replaceAll('<em>', '"')
+                            .replaceAll('</em>', '"')}
+                        </code>
                       </pre>
                     </a>
                   </Link>
