@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Laravel\Scout\Searchable;
 
 /**
@@ -47,6 +48,7 @@ use Laravel\Scout\Searchable;
  * @property-read \App\Models\Project $project
  * @method static Builder|File depthSort(array $args)
  * @method static \Illuminate\Database\Eloquent\Builder|AppModel sort(array $args)
+ * @property-read \App\Models\Code|null $code
  */
 class File extends AppModel
 {
@@ -73,6 +75,10 @@ class File extends AppModel
         'htaccess' => 0.5,
     ];
 
+    protected $casts = [
+        'is_dir' => 'boolean',
+    ];
+
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
@@ -83,23 +89,32 @@ class File extends AppModel
         return $this->hasMany(Klass::class);
     }
 
-    public function searchableAs()
+    public function code(): HasOne
+    {
+        return $this->hasOne(Code::class);
+    }
+
+    public function searchableAs(): string
     {
         return 'files';
     }
 
     public function toSearchableArray(): array
     {
-        $search = $this->name;
-        if ($this->is_dir) {
-            $search = $this->file_path;
-        } else if ($this->file_path) {
-            $search = rtrim($this->file_path, '/') . '/' . $this->name;
-        }
+//        $searchTitle = $this->name;
+//        if ($this->is_dir) {
+//            $searchTitle = $this->file_path;
+//        } else if ($this->file_path) {
+//            $searchTitle = rtrim($this->file_path, '/') . '/' . $this->name;
+//        }
 
+        $subtitle = $this->project->name.':'.$this->file_path;
         return array_merge(
-            $this->toArray(),
-            ['search' => $search]
+            $this->attributesToArray(),
+            [
+                'search_title' => $this->file_path,
+                'search_subtitle' => $subtitle,
+            ]
         );
     }
 
@@ -108,7 +123,7 @@ class File extends AppModel
      * @param  array  $args
      * @return Builder
      */
-    public function scopeDepthSort(Builder $query, array $args)
+    public function scopeDepthSort(Builder $query, array $args): Builder
     {
         return $query
             ->orderBy('depth', 'ASC')

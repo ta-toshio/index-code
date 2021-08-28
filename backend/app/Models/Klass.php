@@ -56,14 +56,18 @@ class Klass extends AppModel
 
     public function toSearchableArray(): array
     {
-        $search = $this->name;
+        $title = $this->name;
         if ($this->namespace) {
-            $search = rtrim($this->namespace, '\\') . '\\' . $this->name;
+            $title = rtrim($this->namespace, '\\') . '\\' . $this->name;
         }
 
+        $subtitle = $this->file->project->name.':'.$this->file->file_path;
         return array_merge(
-            $this->toArray(),
-            ['search' => $search]
+            $this->attributesToArray(),
+            [
+                'search_title' => $title,
+                'search_subtitle' => $subtitle,
+            ]
         );
     }
 

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Laravel\Scout\Searchable;
 
 /**
@@ -29,22 +30,32 @@ use Laravel\Scout\Searchable;
  * @method static \Illuminate\Database\Eloquent\Builder|Field whereUpdatedAt($value)
  * @mixin \Eloquent
  * @method static \Illuminate\Database\Eloquent\Builder|AppModel sort(array $args)
+ * @property-read \App\Models\Table $table
  */
 class Field extends AppModel
 {
     use HasFactory;
     use Searchable;
 
-    public function searchableAs()
+    public function table(): BelongsTo
+    {
+        return $this->belongsTo(Table::class);
+    }
+
+    public function searchableAs(): string
     {
         return 'fields';
     }
 
     public function toSearchableArray(): array
     {
+        $subtitle = $this->table->project->name;
         return array_merge(
-            $this->toArray(),
-            ['search' => $this->field_name]
+            $this->attributesToArray(),
+            [
+                'search_title' => $this->field_name,
+                'search_subtitle' => $subtitle,
+            ]
         );
     }
 

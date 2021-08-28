@@ -33,6 +33,7 @@ use Laravel\Scout\Searchable;
  * @property int $file_id
  * @method static \Illuminate\Database\Eloquent\Builder|Attribute whereFileId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AppModel sort(array $args)
+ * @property-read \App\Models\File $file
  */
 class Attribute extends AppModel
 {
@@ -45,6 +46,11 @@ class Attribute extends AppModel
     const TYPE_TRAIT = 'trait';
     const TYPE_FUNCTION = 'function';
 
+    public function file(): BelongsTo
+    {
+        return $this->belongsTo(File::class);
+    }
+
     public function klass(): BelongsTo
     {
         return $this->belongsTo(Klass::class);
@@ -52,9 +58,13 @@ class Attribute extends AppModel
 
     public function toSearchableArray(): array
     {
+        $subtitle = $this->file->project->name.':'.$this->file->file_path;
         return array_merge(
-            $this->toArray(),
-            ['search' => $this->name]
+            $this->attributesToArray(),
+            [
+                'search_title' => $this->name,
+                'search_subtitle' => $subtitle,
+            ]
         );
     }
 

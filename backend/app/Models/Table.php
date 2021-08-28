@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Laravel\Scout\Searchable;
 
 /**
@@ -23,22 +24,32 @@ use Laravel\Scout\Searchable;
  * @method static \Illuminate\Database\Eloquent\Builder|Table whereUpdatedAt($value)
  * @mixin \Eloquent
  * @method static \Illuminate\Database\Eloquent\Builder|AppModel sort(array $args)
+ * @property-read \App\Models\Project $project
  */
 class Table extends AppModel
 {
     use HasFactory;
     use Searchable;
 
-    public function searchableAs()
+    public function project(): BelongsTo
+    {
+        return $this->belongsTo(Project::class);
+    }
+
+    public function searchableAs(): string
     {
         return 'tables';
     }
 
     public function toSearchableArray(): array
     {
+        $subtitle = $this->project->name;
         return array_merge(
-            $this->toArray(),
-            ['search' => $this->name]
+            $this->attributesToArray(),
+            [
+                'search_title' => $this->name,
+                'search_subtitle' => $subtitle,
+            ]
         );
     }
 
