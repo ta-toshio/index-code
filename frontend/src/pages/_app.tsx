@@ -9,6 +9,7 @@ import { useApollo } from '../app/withApollo'
 
 import '../styles/global.scss'
 import 'react-toastify/dist/ReactToastify.css'
+import 'react-markdown-editor-lite/lib/index.css'
 import AppProvider from '../app/appProvider'
 
 function MyApp({ Component, pageProps }: AppProps) {

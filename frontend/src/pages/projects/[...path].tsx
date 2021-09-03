@@ -16,7 +16,6 @@ const File: NextPage = () => {
     return `${(path as string[]).slice(1).join('/')}`
   }, [path])
   const projectName = path && path[0]
-  console.log(filePath)
 
   return (
     <Layout>
