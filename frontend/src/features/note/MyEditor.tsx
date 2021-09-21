@@ -2,6 +2,7 @@ import React from 'react'
 import ReactMarkdown from 'react-markdown'
 import ForwardRefEditor, { onImageUpload } from '../../components/editor'
 import useMyEditor from './useMyEditor'
+import CodeInMarkupCode from '../code/CodeInMarkupCode'
 
 const MyEditor: React.FC = () => {
   const { editor, setEditing } = useMyEditor()
@@ -22,10 +23,44 @@ const MyEditor: React.FC = () => {
       </div>
       <ForwardRefEditor
         ref={editor}
-        onImageUpload={onImageUpload}
-        view={{ menu: false, html: false }}
-        renderHTML={(text) => <ReactMarkdown>{text}</ReactMarkdown>}
         autoFocus={true}
+        view={{ menu: false, html: false }}
+        onImageUpload={onImageUpload}
+        renderHTML={(text) => (
+          <ReactMarkdown
+            components={{
+              code({ inline, className, children, ...props }) {
+                const match = /language-(\w+)-\[(.*)\]-(.*)/.exec(
+                  className || ''
+                )
+                if (!inline && match && match[1] === 'ic') {
+                  const projectName = match[2]
+                  const filePath = match[3].split('#')[0] ?? null
+                  const lineNum = match[0].split('#')
+                  const startLine = lineNum[1] ?? undefined
+                  const endLine = lineNum[2] ?? undefined
+                  return (
+                    <CodeInMarkupCode
+                      projectName={projectName}
+                      filePath={filePath}
+                      startLine={startLine ? parseInt(startLine) : undefined}
+                      endLine={endLine ? parseInt(endLine) : undefined}
+                    >
+                      {children}
+                    </CodeInMarkupCode>
+                  )
+                }
+                return (
+                  <code className={className} {...props}>
+                    {children}
+                  </code>
+                )
+              },
+            }}
+          >
+            {text}
+          </ReactMarkdown>
+        )}
       />
     </>
   )
