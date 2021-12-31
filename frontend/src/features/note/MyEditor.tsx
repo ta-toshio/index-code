@@ -26,19 +26,22 @@ const MyEditor: React.FC = () => {
         autoFocus={true}
         view={{ menu: false, html: false }}
         onImageUpload={onImageUpload}
-        renderHTML={(text) => (
+        renderHTML={(text: string) => (
           <ReactMarkdown
             components={{
               code({ inline, className, children, ...props }) {
-                const match = /language-(\w+)-\[(.*)\]-(.*)/.exec(
+                const match = /language-(\w+)-\((.*)\)-\[(.*)\]/.exec(
                   className || ''
                 )
+
+                // ```ic-(EC-CUBE/ec-cube)-[src/Eccube/Doctrine/ORM/Mapping/Driver/AnnotationDriver.php]```
                 if (!inline && match && match[1] === 'ic') {
                   const projectName = match[2]
                   const filePath = match[3].split('#')[0] ?? null
                   const lineNum = match[0].split('#')
                   const startLine = lineNum[1] ?? undefined
                   const endLine = lineNum[2] ?? undefined
+
                   return (
                     <CodeInMarkupCode
                       projectName={projectName}

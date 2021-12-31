@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react'
 type Props = {
   projectName: string | undefined
   filePath: string | undefined
-  startLine?: number | null | undefined
-  endLine?: number | null | undefined
+  startLine?: number | undefined
+  endLine?: number | undefined
 }
 
 const getCode = (

@@ -33,11 +33,11 @@ export const requestVerifyEmail = async (
         error: 'Something went wrong',
       }
     }
-  } catch (error) {
-    if (error.response && error.response.data) {
+  } catch (err) {
+    if (err && err.response && err.response.data) {
       return {
         success: false,
-        error: error.response.data.message,
+        error: err.response.data.message,
       }
     } else {
       return {

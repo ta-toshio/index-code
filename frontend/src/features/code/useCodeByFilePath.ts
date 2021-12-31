@@ -5,6 +5,7 @@ import {
   GetFileByFilePathAndProjectNameQueryVariables,
 } from '../../generated/graphql'
 import { GET_FILE_BY_FILE_PATH_AND_PROJECT_NAME } from '../../queries/file'
+import useDebouncedCallback from '../../utils/useDebouncedCallback'
 
 type Props = {
   projectName: string | undefined
@@ -17,14 +18,23 @@ const useCodeByFilePath = ({ projectName, filePath }: Props) => {
     GetFileByFilePathAndProjectNameQueryVariables
   >(GET_FILE_BY_FILE_PATH_AND_PROJECT_NAME)
 
-  useEffect(() => {
-    if (projectName && filePath) {
+  const debounced = useDebouncedCallback(
+    // function
+    (projectName, filePath) => {
       fetchFile({
         variables: {
           projectName: projectName,
           filePath,
         },
       })
+    },
+    // delay in ms
+    2000
+  )
+
+  useEffect(() => {
+    if (projectName && filePath) {
+      debounced(projectName, filePath)
     }
   }, [projectName, filePath])
 
