@@ -7,7 +7,7 @@ import {
 import { MEMOS_BY_FILE_ID } from '../../queries/memo'
 
 type Props = {
-  fileId: number
+  fileId?: number
 }
 
 const useMemoByFileId = ({ fileId }: Props) => {

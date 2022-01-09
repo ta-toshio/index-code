@@ -13,7 +13,7 @@ type Props = {
 
 const Code: React.FC<Props> = ({ projectName, filePath }) => {
   const { file } = useCodeByFilePath({ projectName, filePath })
-  const { memos } = useMemoByFileId({ fileId: +file?.id })
+  const { memos } = useMemoByFileId({ fileId: file && +file.id })
 
   return (
     <div>

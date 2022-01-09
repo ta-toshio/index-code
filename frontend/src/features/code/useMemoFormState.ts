@@ -13,7 +13,7 @@ import {
 export type CacheMemo = {
   id: number | null | undefined
   key: number
-  text: string
+  text: string | null | undefined
   submitting: boolean
 }
 
@@ -30,7 +30,11 @@ const useMemoFormState = ({ lineNum, fileId, initialMemos }: Props) => {
     StoreMemoMutationVariables
   >(STORE_MEMO)
 
-  const setSubmitting = (submitting: boolean, memo: CacheMemo, callback) => {
+  const setSubmitting = (
+    submitting: boolean,
+    memo: CacheMemo,
+    callback: any
+  ) => {
     setMemos((prevMemos) => {
       const _memo = prevMemos.find((_memo) => _memo.key === memo.key)
       if (!_memo) return prevMemos
@@ -54,6 +58,8 @@ const useMemoFormState = ({ lineNum, fileId, initialMemos }: Props) => {
         submitting: false,
       }))
       setMemos(memos)
+    } else {
+      setMemos([])
     }
   }, [initialMemos])
 
@@ -89,14 +95,14 @@ const useMemoFormState = ({ lineNum, fileId, initialMemos }: Props) => {
             id: memo.id ? `${memo.id}` : null,
             file_id: fileId,
             line: lineNum,
-            body: memo.text || null,
+            body: memo.text || '',
           },
         },
       })
         .then((res) => {
           if (res.data) {
-            setSubmitting(false, memo, (targetMemo) => {
-              targetMemo.id = +res.data.storeMemo.id
+            setSubmitting(false, memo, (targetMemo: CacheMemo) => {
+              targetMemo.id = res.data && +res.data.storeMemo.id
             })
             toast('保存しました')
           } else {
